@@ -9,5 +9,9 @@ Linetracer::Linetracer():
 
 void Linetracer::run(){
     for (size_t i = 0; i < 5; i++)  readLineResult[i] = phts[i].read;
-    
+
+    if(readLineResult[LL] || readLineResult[RR]) {  //  もし端っこが読んでいたら
+        adjustment();
+        
+    }
 }

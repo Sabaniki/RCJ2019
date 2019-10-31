@@ -4,6 +4,7 @@
 #include "Arduino.h"
 #include "PhotoReflector.h"
 #include "Move.h"
+#include "ColorSensor.h"
 #pragma endregion
 class Linetracer {
 private:
@@ -11,11 +12,18 @@ private:
     PhotoReflector phts[5] = {
         PhotoReflector(0),
         PhotoReflector(1),
+        PhotoReflector(2),
         PhotoReflector(3),
         PhotoReflector(4),
-        PhotoReflector(5),
     };
+    enum PhtNums{
+        LL, L, C, FC, R, RR
+	};
+
     bool readLineResult[5] = { false, false, false, false, false };
+    void adjustment();
+    char judgeColor();
+
 public:
     Linetracer();
     void run();

@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"name": "RCJ2019",
+			"path": "."
+		}
+	],
+	"settings": {
+		"terminal.integrated.env.osx": {
+			"PATH": "/Users/sabac/.platformio/penv/bin:/Users/sabac/.platformio/penv:/usr/local/git/bin:/Users/sabac/.rbenv/shims:/Users/sabac/.pyenv/shims:/Users/sabac/.pyenv/bin:/usr/local/Cellar/zplug/2.4.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/sabac/.fzf/bin",
+			"PLATFORMIO_CALLER": "vscode"
+		}
+	}
+}
