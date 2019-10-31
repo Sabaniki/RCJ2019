@@ -4,6 +4,8 @@
 class Move {
 private:
     Motor motorL, motorR;
+    void stop(bool strong);
+    
 public:
     Move(Motor motorL, Motor motorR);
     void straight(int speed);
