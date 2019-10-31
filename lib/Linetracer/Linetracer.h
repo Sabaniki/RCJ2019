@@ -15,6 +15,7 @@ private:
         PhotoReflector(4),
         PhotoReflector(5),
     };
+    bool readLineResult[5] = { false, false, false, false, false };
 public:
     Linetracer();
     void run();
