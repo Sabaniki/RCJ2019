@@ -1,6 +1,7 @@
 #ifndef ___Class_Move
 #define ___Class_Move
 #include "Motor.h"
+#include "Motor.cpp"
 class Move {
 private:
     Motor motorL, motorR;

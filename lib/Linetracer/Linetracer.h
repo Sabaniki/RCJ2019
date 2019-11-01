@@ -1,11 +1,16 @@
 #ifndef ___Class_Linetracer
 #define ___Class_Linetracer
+
 #pragma region includes
 #include "Arduino.h"
 #include "PhotoReflector.h"
+#include "PhotoReflector.cpp"
 #include "Move.h"
+#include "Move.cpp"
 #include "ColorSensor.h"
+#include "ColorSensor.cpp"
 #pragma endregion
+
 class Linetracer {
 private:
     Move manager;

@@ -1,4 +1,8 @@
+#ifndef ___Cpp_Move
+#define ___Cpp_Move
 #include "Move.h"
+#include "Motor.h"
+#include "Motor.cpp"
 #include "Arduino.h"
 
 Move::Move(Motor motorL, Motor motorR): motorL(motorL), motorR(motorR) {
@@ -61,3 +65,4 @@ void  Move::left(int speed, bool rotate){
         motorR.write(speed);
     }
 }
+#endif
