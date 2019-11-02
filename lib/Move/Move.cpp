@@ -9,18 +9,6 @@ Move::Move(Motor motorL, Motor motorR): motorL(motorL), motorR(motorR) {
 
 }
 
-void Move::stop(bool strong){
-    if(strong){
-        motorL.write(-255);
-        motorR.write(-255);
-        delay(50);
-    }
-    else {
-        motorL.write(-255);
-        motorR.write(-255);
-    }
-}
-
 void Move::straight(int speed){
     motorL.write(speed);
     motorR.write(speed);
@@ -63,6 +51,18 @@ void  Move::left(int speed, bool rotate){
     else {
         motorL.write(0);
         motorR.write(speed);
+    }
+}
+
+void Move::stop(bool strong){
+    if(strong){
+        motorL.write(-255);
+        motorR.write(-255);
+        delay(50);
+    }
+    else {
+        motorL.write(-255);
+        motorR.write(-255);
     }
 }
 #endif

@@ -5,7 +5,6 @@
 class Move {
 private:
     Motor motorL, motorR;
-    void stop(bool strong);
 
 public:
     Move(Motor motorL, Motor motorR);
@@ -15,6 +14,7 @@ public:
     void back(int speed, int length);
     void right(int speed, bool rotate);
     void left(int speed, bool rotate);
+    void stop(bool strong);
 };
 
 #endif

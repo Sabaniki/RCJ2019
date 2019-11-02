@@ -24,11 +24,19 @@ Linetracer::Colors Linetracer::judgeColor(){
 }
 
 void Linetracer::right90(){
-
+    manager.stop(false);
+    while (phts[C].read())
+        manager.right(slowSpeed, true);
+    while (!phts[C].read())
+        manager.right(slowSpeed, true);
 }
 
 void Linetracer::left90(){
-
+    manager.stop(false);
+    while (phts[C].read())
+        manager.left(slowSpeed, true);
+    while (!phts[C].read())
+        manager.left(slowSpeed, true);
 }
 
 void Linetracer::run(){
