@@ -21,17 +21,31 @@ private:
         PhotoReflector(3),
         PhotoReflector(4),
     };
+
     enum PhtNums{
         LL, L, C, FC, R, RR
 	};
+    enum Colors{
+        WW, GW, WG, GG
+    };
 
-    bool readLineResult[5] = { false, false, false, false, false };
+    bool lineResult[5] = { false, false, false, false, false };
+    char colorResult[5];
     void adjustment();
-    char judgeColor();
+    Colors judgeColor();
+
+    int speed = 255;
+    int slowSpeed = 220;
+    int straightLength = 30;
+    int backLength = 10;
+    int REN = 0;
+    int RENlength = 10;
 
 public:
     Linetracer();
     void run();
+    void right90();
+    void left90();
 };
 
 #endif
