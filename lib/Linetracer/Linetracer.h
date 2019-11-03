@@ -21,6 +21,11 @@ private:
         PhotoReflector(3),
         PhotoReflector(4),
     };
+    int colorThresholds[2] = {1, 1};
+    ColorSensor colorSensors[2] = {
+        ColorSensor(5, 6, 7, colorThresholds),
+        ColorSensor(8, 9, 10, colorThresholds)
+    };
 
     enum PhtNums{
         LL, L, C, FC, R, RR

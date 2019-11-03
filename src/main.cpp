@@ -7,6 +7,6 @@ void setup() {
 }
 
 void loop() {
-	auto tracer = Linetracer();
-	tracer.run();
+	auto tracer = new Linetracer();
+	tracer->run();
 }

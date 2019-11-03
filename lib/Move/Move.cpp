@@ -14,7 +14,8 @@ void Move::straight(int speed){
     motorR.write(speed);
 }
 
-void Move::straight(int speed, int length){ // NOT_INMPLEMENTED
+// NOT_INMPLEMENTED
+void Move::straight(int speed, int length){ 
     while(true/* 終了条件とかそんな感じのこと */){
         motorL.write(speed);
         motorR.write(speed);
@@ -64,5 +65,10 @@ void Move::stop(bool strong){
         motorL.write(-255);
         motorR.write(-255);
     }
+}
+
+void Move::write(int leftSpeed, int rightSpeed){
+    motorL.write(leftSpeed);
+    motorR.write(rightSpeed);
 }
 #endif

@@ -15,6 +15,7 @@ public:
     void right(int speed, bool rotate);
     void left(int speed, bool rotate);
     void stop(bool strong);
+    void write(int leftSpeed, int rightSpeed);
 };
 
 #endif

@@ -7,6 +7,8 @@
 #include "Motor.cpp"
 #include "Move.h"
 #include "Move.cpp"
+#include "ColorSensor.h"
+#include "ColorSensor.cpp"
 #pragma endregion
 
 Linetracer::Linetracer():
@@ -14,13 +16,20 @@ Linetracer::Linetracer():
 
 }
 
-void Linetracer::adjustment(){
+inline void Linetracer::adjustment(){
+    while (colorSensors[0].irradiateGreen())  // この時点で黒のラインを左のカラーセンサが読んでいたら、読まなくなるまで
+        manager.write(-slowSpeed, 0);       // 左の車輪を後退
 
+    while (colorSensors[1].irradiateGreen())  // 同様に、この時点で黒のラインを右のカラーセンサが読んでいたら、読まなくなるまで
+        manager.write(0, -slowSpeed);       // 右の車輪を後退
 }
 
 Linetracer::Colors Linetracer::judgeColor(){
-    Linetracer::Colors result;
-    return result;
+    adjustment();
+    int result = 0;
+    if(colorSensors[0].irradiateRed()) result++;
+    if(colorSensors[1].irradiateRed()) result += 2;
+    return (Linetracer::Colors)result;
 }
 
 void Linetracer::right90(){
@@ -58,6 +67,7 @@ void Linetracer::run(){
             else // 何か事故が起きてるので少し下がってみる
                 manager.back(speed, backLength);
         }
+        // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
         else if(colorResult == GW)
             left90();
         else if(colorResult == WG)
