@@ -51,12 +51,12 @@ private:
     void adjustment();
     Colors judgeColor();
 
-    int speed = SPEED;
-    int slowSpeed = SLOW_SPEED;
-    int straightLength = STRAIGHT_LENGH;
-    int backLength = BACK_LENGH;
+    const int speed = SPEED;
+    const int slowSpeed = SLOW_SPEED;
+    const int straightLength = STRAIGHT_LENGH;
+    const int backLength = BACK_LENGH;
     int REN = 0;
-    int RENlength = REN_LENGTH;
+    const int RENlength = REN_LENGTH;
 
 public:
     Linetracer();
