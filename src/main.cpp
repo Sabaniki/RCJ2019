@@ -8,5 +8,5 @@ void setup() {
 
 void loop() {
 	auto tracer = new Linetracer();
-	tracer->run();
+	while(true) tracer->run();
 }

@@ -2,6 +2,7 @@
 #define ___Class_Linetracer
 
 #pragma region includes
+#include "Variables.h"
 #include "Arduino.h"
 #include "PhotoReflector.h"
 #include "PhotoReflector.cpp"
@@ -15,16 +16,27 @@ class Linetracer {
 private:
     Move manager;
     PhotoReflector phts[5] = {
-        PhotoReflector(0),
-        PhotoReflector(1),
-        PhotoReflector(2),
-        PhotoReflector(3),
-        PhotoReflector(4),
+        PhotoReflector(PHT_PIN_1),
+        PhotoReflector(PHT_PIN_2),
+        PhotoReflector(PHT_PIN_3),
+        PhotoReflector(PHT_PIN_4),
+        PhotoReflector(PHT_PIN_5),
     };
-    int colorThresholds[2] = {1, 1};
+    int colorThresholds[2] = {THRESHOLD_RED, THRESHOLD_GREEN};
+    // {0: 左, 1: 右}
     ColorSensor colorSensors[2] = {
-        ColorSensor(5, 6, 7, colorThresholds),
-        ColorSensor(8, 9, 10, colorThresholds)
+        ColorSensor(
+            COLOR_SENSOR_L_RED_PIN,
+            COLOR_SENSOR_L_GREEN_PIN,
+            COLOR_SENSOR_L_READER_PIN,
+            colorThresholds
+        ),
+        ColorSensor(
+            COLOR_SENSOR_R_RED_PIN,
+            COLOR_SENSOR_R_GREEN_PIN,
+            COLOR_SENSOR_R_READER_PIN,
+            colorThresholds
+        ),
     };
 
     enum PhtNums{
@@ -39,12 +51,12 @@ private:
     void adjustment();
     Colors judgeColor();
 
-    int speed = 255;
-    int slowSpeed = 220;
-    int straightLength = 30;
-    int backLength = 10;
+    int speed = SPEED;
+    int slowSpeed = SLOW_SPEED;
+    int straightLength = STRAIGHT_LENGH;
+    int backLength = BACK_LENGH;
     int REN = 0;
-    int RENlength = 10;
+    int RENlength = REN_LENGTH;
 
 public:
     Linetracer();

@@ -12,7 +12,10 @@
 #pragma endregion
 
 Linetracer::Linetracer():
-    manager(Motor(1, 2), Motor(3, 4)) {
+    manager(
+        Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
+        Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN)
+    ) {
 
 }
 
@@ -89,6 +92,6 @@ void Linetracer::run(){
         REN = 0;
         manager.straight(speed);
     }
-    if(REN > 50)
+    if(REN > THRESHOLD_REN)
         manager.straight(slowSpeed, RENlength);
 }
