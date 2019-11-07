@@ -9,15 +9,18 @@
 #define COLOR_SENSOR_R_RED_PIN -1
 #define COLOR_SENSOR_R_GREEN_PIN -1
 #define COLOR_SENSOR_R_READER_PIN -1
+
 #define COLOR_SENSOR_L_RED_PIN -1
 #define COLOR_SENSOR_L_GREEN_PIN -1
 #define COLOR_SENSOR_L_READER_PIN -1
+
 #define THRESHOLD_RED -1
 #define THRESHOLD_GREEN -1
 
 //----- モータ -----//
 #define MOTOR_L_FRONT_PIN -1
 #define MOTOR_L_BACK_PIN -1
+
 #define MOTOR_R_FRONT_PIN -1
 #define MOTOR_R_BACK_PIN -1
 

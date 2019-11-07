@@ -22,7 +22,7 @@ private:
         PhotoReflector(PHT_PIN_4),
         PhotoReflector(PHT_PIN_5),
     };
-    int colorThresholds[2] = {THRESHOLD_RED, THRESHOLD_GREEN};
+    int colorThresholds[2] = { THRESHOLD_RED, THRESHOLD_GREEN };
     // {0: 左, 1: 右}
     ColorSensor colorSensors[2] = {
         ColorSensor(
