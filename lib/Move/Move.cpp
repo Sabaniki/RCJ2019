@@ -71,7 +71,6 @@ void Move::stop(bool strong){
     }
 }
 
-// このメソッドあんまいらないかもしれない
 void Move::write(int leftSpeed, int rightSpeed){
     motorL.write(leftSpeed);
     motorR.write(rightSpeed);
