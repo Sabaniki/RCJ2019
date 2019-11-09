@@ -1,7 +1,6 @@
 #ifndef ___Class_Linetracer
 #define ___Class_Linetracer
 
-#pragma region includes
 #include "Variables.h"
 #include "Arduino.h"
 #include "PhotoReflector.h"
@@ -10,7 +9,6 @@
 #include "Move.cpp"
 #include "ColorSensor.h"
 #include "ColorSensor.cpp"
-#pragma endregion
 
 class Linetracer {
 private:

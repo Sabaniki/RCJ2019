@@ -3,9 +3,14 @@
 #include "Move.h"
 #include "Motor.h"
 #include "Motor.cpp"
+#include "RotaryEncoder.h"
+#include "RotaryEncoder.cpp"
 #include "Arduino.h"
 
-Move::Move(Motor motorL, Motor motorR): motorL(motorL), motorR(motorR) {
+Move::Move(Motor motorL, Motor motorR, RotaryEncoder rotaryEncoder):
+    motorL(motorL),
+    motorR(motorR),
+    rotaryEncoder(rotaryEncoder) {
 
 }
 
@@ -14,9 +19,8 @@ void Move::straight(int speed){
     motorR.write(speed);
 }
 
-// NOT_INMPLEMENTED
 void Move::straight(int speed, int length){ 
-    while(true/* 終了条件とかそんな感じのこと */){
+    while(rotaryEncoder.until(length)){
         motorL.write(speed);
         motorR.write(speed);
     }
@@ -28,7 +32,7 @@ void Move::back(int speed){
 }
 
 void Move::back(int speed, int length){
-    while(true/* 終了条件とかそんな感じのこと */){
+    while(rotaryEncoder.until(length)){
         motorL.write(-speed);
         motorR.write(-speed);
     }
@@ -67,8 +71,10 @@ void Move::stop(bool strong){
     }
 }
 
-void Move::write(int leftSpeed, int rightSpeed){
-    motorL.write(leftSpeed);
-    motorR.write(rightSpeed);
+void Move::write(int leftSpeed, int rightSpeed, int length){
+    while(rotaryEncoder.until(length)){
+        motorL.write(leftSpeed);
+        motorR.write(rightSpeed);
+    }
 }
 #endif

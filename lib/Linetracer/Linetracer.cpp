@@ -1,4 +1,3 @@
-#pragma region includes
 #include "Linetracer.h"
 #include "Arduino.h"
 #include "PhotoReflector.h"
@@ -9,12 +8,14 @@
 #include "Move.cpp"
 #include "ColorSensor.h"
 #include "ColorSensor.cpp"
-#pragma endregion
+#include "RotaryEncoder.h"
+#include "RotaryEncoder.cpp"
 
 Linetracer::Linetracer():
     manager(
         Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
-        Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN)
+        Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
+        RotaryEncoder(ROTARY_ENCODER_READER_PIN)
     ) {
 }
 

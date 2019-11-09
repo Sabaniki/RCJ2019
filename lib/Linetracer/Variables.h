@@ -24,6 +24,9 @@
 #define MOTOR_R_FRONT_PIN 3
 #define MOTOR_R_BACK_PIN 2
 
+//----- ロータリーエンコーダ -----//
+#define ROTARY_ENCODER_READER_PIN -1
+
 //----- 速度 -----//
 #define SPEED 255
 #define SLOW_SPEED 230
