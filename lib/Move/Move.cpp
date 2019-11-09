@@ -72,6 +72,12 @@ void Move::stop(bool strong){
 }
 
 // このメソッドあんまいらないかもしれない
+void Move::write(int leftSpeed, int rightSpeed){
+    motorL.write(leftSpeed);
+    motorR.write(rightSpeed);
+}
+
+// このメソッドあんまいらないかもしれない
 void Move::write(int leftSpeed, int rightSpeed, int length){
     while(rotaryEncoder.until(length)){
         motorL.write(leftSpeed);

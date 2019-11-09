@@ -2,6 +2,8 @@
 #define ___Class_Move
 #include "Motor.h"
 #include "Motor.cpp"
+#include "RotaryEncoder.h"
+#include "RotaryEncoder.cpp"
 class Move {
 private:
     Motor motorL, motorR;
