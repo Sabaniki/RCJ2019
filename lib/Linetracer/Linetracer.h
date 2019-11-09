@@ -9,16 +9,18 @@
 #include "Move.cpp"
 #include "ColorSensor.h"
 #include "ColorSensor.cpp"
+#include "KuromikaLine.h"
+#include "KuromikaLine.cpp"
 
 class Linetracer {
 private:
     Move manager;
-    PhotoReflector phts[5] = {
-        PhotoReflector(PHT_PIN_1),
-        PhotoReflector(PHT_PIN_2),
-        PhotoReflector(PHT_PIN_3),
-        PhotoReflector(PHT_PIN_4),
-        PhotoReflector(PHT_PIN_5),
+    KuromikaLine lineSensors[5] = {
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_1, LINE_SENSOR_THRESHOLD),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_2, LINE_SENSOR_THRESHOLD),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_3, LINE_SENSOR_THRESHOLD),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_4, LINE_SENSOR_THRESHOLD),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_5, LINE_SENSOR_THRESHOLD),
     };
     int colorThresholds[2] = { THRESHOLD_RED, THRESHOLD_GREEN };
     // {0: 左, 1: 右}

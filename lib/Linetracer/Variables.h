@@ -1,9 +1,11 @@
 //----- ラインセンサ -----//
-#define PHT_PIN_1 -1
-#define PHT_PIN_2 -1
-#define PHT_PIN_3 -1
-#define PHT_PIN_4 -1
-#define PHT_PIN_5 -1
+#define LINE_GREEN_PIN -1
+#define LINE_SENSOR_THRESHOLD -1
+#define LINE_SENSOR_PIN_1 -1
+#define LINE_SENSOR_PIN_2 -1
+#define LINE_SENSOR_PIN_3 -1
+#define LINE_SENSOR_PIN_4 -1
+#define LINE_SENSOR_PIN_5 -1
 
 //----- カラーセンサ -----//
 #define COLOR_SENSOR_R_RED_PIN -1
