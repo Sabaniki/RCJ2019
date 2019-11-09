@@ -26,13 +26,13 @@
 
 //----- ロータリーエンコーダ -----//
 #define ROTARY_ENCODER_READER_PIN -1
+#define STRAIGHT_LENGH 30
+#define BACK_LENGH 10
+#define REN_LENGTH 10
 
 //----- 速度 -----//
 #define SPEED 255
 #define SLOW_SPEED 230
 
-//----- 調整用距離 -----//
-#define STRAIGHT_LENGH 30
-#define BACK_LENGH 10
-#define REN_LENGTH 10
+//----- その他 -----//
 #define THRESHOLD_REN 50
