@@ -16,7 +16,6 @@ Linetracer::Linetracer():
         Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
         Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN)
     ) {
-
 }
 
 inline void Linetracer::adjustment(){

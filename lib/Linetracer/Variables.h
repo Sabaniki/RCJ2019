@@ -18,15 +18,15 @@
 #define THRESHOLD_GREEN -1
 
 //----- モータ -----//
-#define MOTOR_L_FRONT_PIN -1
-#define MOTOR_L_BACK_PIN -1
+#define MOTOR_L_FRONT_PIN 4
+#define MOTOR_L_BACK_PIN 5
 
-#define MOTOR_R_FRONT_PIN -1
-#define MOTOR_R_BACK_PIN -1
+#define MOTOR_R_FRONT_PIN 3
+#define MOTOR_R_BACK_PIN 2
 
 //----- 速度 -----//
 #define SPEED 255
-#define SLOW_SPEED 255
+#define SLOW_SPEED 230
 
 //----- 調整用距離 -----//
 #define STRAIGHT_LENGH 30
