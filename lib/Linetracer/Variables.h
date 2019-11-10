@@ -1,5 +1,5 @@
 //----- ラインセンサ -----//
-#define LINE_GREEN_PIN -1
+#define LINE_SENSOR_GREEN_PIN -1
 #define LINE_SENSOR_THRESHOLD -1
 #define LINE_SENSOR_PIN_1 -1
 #define LINE_SENSOR_PIN_2 -1
