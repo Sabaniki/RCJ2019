@@ -1,7 +1,7 @@
 #include "Linetracer.h"
 #include "Arduino.h"
-#include "PhotoReflector.h"
-#include "PhotoReflector.cpp"
+// #include "PhotoReflector.h"
+// #include "PhotoReflector.cpp"
 #include "Motor.h"
 #include "Motor.cpp"
 #include "Move.h"
@@ -37,22 +37,22 @@ Linetracer::Colors Linetracer::judgeColor(){
 
 void Linetracer::right90(){
     manager.stop(false);
-    while (phts[C].read())
+    while (lineSensors[C].read())
         manager.right(slowSpeed, true);
-    while (!phts[C].read())
+    while (!lineSensors[C].read())
         manager.right(slowSpeed, true);
 }
 
 void Linetracer::left90(){
     manager.stop(false);
-    while (phts[C].read())
+    while (lineSensors[C].read())
         manager.left(slowSpeed, true);
-    while (!phts[C].read())
+    while (!lineSensors[C].read())
         manager.left(slowSpeed, true);
 }
 
 void Linetracer::run(){
-    for (size_t i = 0; i < 5; i++)  lineResult[i] = phts[i].read();
+    for (size_t i = 0; i < 5; i++)  lineResult[i] = lineSensors[i].read();
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
