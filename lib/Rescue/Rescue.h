@@ -1,5 +1,5 @@
-#ifndef ___Cpp_Resucue
-#define ___Cpp_Resucue
+#ifndef ___Class_Resucue
+#define ___Class_Resucue
 #include "Rescue.h"
 #include "Rescue.cpp"
 #include "Motor.h"
