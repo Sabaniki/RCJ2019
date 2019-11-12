@@ -51,7 +51,7 @@ void Linetracer::left90(){
         manager.left(slowSpeed, true);
 }
 
-void Linetracer::run(){
+bool Linetracer::run(){
     for (size_t i = 0; i < 5; i++)  lineResult[i] = lineSensors[i].read();
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
@@ -94,4 +94,6 @@ void Linetracer::run(){
     }
     if(REN > THRESHOLD_REN)
         manager.straight(slowSpeed, RENlength);
+    delay(1);
+    return true;
 }

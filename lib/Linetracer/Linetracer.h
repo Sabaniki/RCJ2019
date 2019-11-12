@@ -60,7 +60,7 @@ private:
 
 public:
     Linetracer();
-    void run();
+    bool run();
     void right90();
     void left90();
 };
