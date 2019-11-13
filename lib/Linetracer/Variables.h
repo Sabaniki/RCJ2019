@@ -37,8 +37,8 @@
 #define REN_LENGTH 10
 
 //----- 速度 -----//
-#define SPEED 65
-#define SLOW_SPEED 60
+#define SPEED 120
+#define SLOW_SPEED 50
 
 //----- その他 -----//
 #define THRESHOLD_REN 50

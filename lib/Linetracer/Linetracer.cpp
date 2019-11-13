@@ -65,27 +65,27 @@ bool Linetracer::run(){
     if(lineResult[LL] || lineResult[RR]) {
         Serial.println("LL | RR");
         REN = 0;
-        // Linetracer::Colors colorResult = judgeColor();
-        // if(!colorResult){
-        //     int blackSum = 0;
-        //     for (size_t i = 0; i < 5; i++) blackSum += lineResult[i];
-        //     if(blackSum >= 3) manager.straight(speed, straightLength);
-        //     else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
-        //         left90();
-        //     else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
-        //         right90();
-        //     else // 何か事故が起きてるので少し下がってみる
-        //         manager.back(speed, backLength);
-        // }
-        // // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
-        // else if(colorResult == GW)
-        //     left90();
-        // else if(colorResult == WG)
-        //     right90();
-        // else if(colorResult == GG){
-        //     right90();
-        //     right90();
-        // }
+        Linetracer::Colors colorResult = judgeColor();
+        if(!colorResult){
+            int blackSum = 0;
+            for (size_t i = 0; i < 5; i++) blackSum += lineResult[i];
+            if(blackSum >= 3) manager.straight(speed, straightLength);
+            else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
+                left90();
+            else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
+                right90();
+            else // 何か事故が起きてるので少し下がってみる
+                manager.back(speed, backLength);
+        }
+        // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
+        else if(colorResult == GW)
+            left90();
+        else if(colorResult == WG)
+            right90();
+        else if(colorResult == GG){
+            right90();
+            right90();
+        }
         manager.stop(false);
     }
     if(lineResult[L]){
@@ -93,7 +93,7 @@ bool Linetracer::run(){
         REN++;
         manager.left(speed, true);
     }
-    if(lineResult[R]){
+    else if(lineResult[R]){
         Serial.println("R");
         REN++;
         manager.right(speed, true);
