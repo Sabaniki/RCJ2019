@@ -26,14 +26,14 @@ private:
     // {0: 左, 1: 右}
     ColorSensor colorSensors[2] = {
         ColorSensor(
-            COLOR_SENSOR_L_RED_PIN,
-            COLOR_SENSOR_L_GREEN_PIN,
+            COLOR_SENSOR_RED_PIN,
+            COLOR_SENSOR_GREEN_PIN,
             COLOR_SENSOR_L_READER_PIN,
             colorThresholds
         ),
         ColorSensor(
-            COLOR_SENSOR_R_RED_PIN,
-            COLOR_SENSOR_R_GREEN_PIN,
+            COLOR_SENSOR_RED_PIN,
+            COLOR_SENSOR_GREEN_PIN,
             COLOR_SENSOR_R_READER_PIN,
             colorThresholds
         ),
