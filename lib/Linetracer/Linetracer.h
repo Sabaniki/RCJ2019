@@ -16,11 +16,11 @@ class Linetracer {
 private:
     Move manager;
     KuromikaLine lineSensors[5] = {
-        KuromikaLine(LINE_SENSOR_GREEN_PIN, LINE_SENSOR_PIN_1, LINE_SENSOR_THRESHOLD),
-        KuromikaLine(LINE_SENSOR_GREEN_PIN, LINE_SENSOR_PIN_2, LINE_SENSOR_THRESHOLD),
-        KuromikaLine(LINE_SENSOR_GREEN_PIN, LINE_SENSOR_PIN_3, LINE_SENSOR_THRESHOLD),
-        KuromikaLine(LINE_SENSOR_GREEN_PIN, LINE_SENSOR_PIN_4, LINE_SENSOR_THRESHOLD),
-        KuromikaLine(LINE_SENSOR_GREEN_PIN, LINE_SENSOR_PIN_5, LINE_SENSOR_THRESHOLD),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_1, LINE_SENSOR_THRESHOLD_1),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_2, LINE_SENSOR_THRESHOLD_2),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_3, LINE_SENSOR_THRESHOLD_3),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_4, LINE_SENSOR_THRESHOLD_4),
+        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_5, LINE_SENSOR_THRESHOLD_5),
     };
     int colorThresholds[2] = { THRESHOLD_RED, THRESHOLD_GREEN };
     // {0: 左, 1: 右}
@@ -40,7 +40,7 @@ private:
     };
 
     enum PhtNums{
-        LL, L, C, FC, R, RR
+        LL, L, C, R, RR
 	};
     enum Colors{
         WW, GW, WG, GG
@@ -49,6 +49,7 @@ private:
     bool lineResult[5] = { false, false, false, false, false };
     char colorResult[5];
     void adjustment();
+    void newKingOfJudge();
     Colors judgeColor();
 
     const int speed = SPEED;
@@ -60,7 +61,7 @@ private:
 
 public:
     Linetracer();
-    void run();
+    bool run();
     void right90();
     void left90();
 };
