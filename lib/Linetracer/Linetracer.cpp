@@ -27,8 +27,37 @@ inline void Linetracer::adjustment(){
         manager.write(0, -slowSpeed);       // 右の車輪を後退
 }
 
+void Linetracer::newKingOfJudge(){
+    bool whileBlackLine[5] = { false, false, false, false, false };
+    bool readLR[2] = { false, false };
+    int leftPower, rightPower;
+    while (true){
+        for (size_t i = 0; i < 5; i++) whileBlackLine[i] = lineSensors[i].read();
+        if(whileBlackLine[L]) readLR[0] = true;
+        else if(whileBlackLine[R]) readLR[1] = true;
+        if(!(whileBlackLine[LL] && whileBlackLine[RR])) break;
+        manager.back(slowSpeed);
+    }
+    manager.stop(false);
+    delay(5);
+    if (whileBlackLine[LL]){
+        leftPower = 0;
+        rightPower = speed;
+        if(!readLR[0]) rightPower *= -1;
+        while (!lineSensors[L].read()) manager.write(leftPower, rightPower);
+    }
+    else{
+        leftPower = speed;
+        rightPower = 0;
+        if(!readLR[1]) leftPower *= -1;
+        while (!lineSensors[R].read()) manager.write(leftPower, rightPower);
+    }
+    manager.stop(false);
+    delay(5);
+}
+
 Linetracer::Colors Linetracer::judgeColor(){
-    adjustment();
+    // adjustment();
     int result = 0;
     if(colorSensors[0].irradiateRed()) result++;
     if(colorSensors[1].irradiateRed()) result += 2;
@@ -58,7 +87,6 @@ bool Linetracer::run(){
         Serial.print(", ");
     }
     Serial.println("");
-    
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
