@@ -17,13 +17,6 @@
 class Rescue{
     private:
         Move manager
-        PhotoReflector phts[5] = {
-            PhotoReflector(PHT_PIN_1),
-            PhotoReflector(PHT_PIN_2),
-            PhotoReflector(PHT_PIN_3),
-            PhotoReflector(PHT_PIN_4),
-            PhotoReflector(PHT_PIN_5),
-    }   ;
         Motor motorL, motorR
         RotaryEncoder rotaryEncoder
     public:
