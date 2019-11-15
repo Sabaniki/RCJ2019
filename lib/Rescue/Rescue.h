@@ -19,7 +19,15 @@ class Rescue{
         Move manager
         Motor motorL, motorR
         RotaryEncoder rotaryEncoder
+
+        ServoPin servos[2]{
+            ServoPin()
+        }
     public:
+        Rescue();
+        bool Judge();
+
+
 
 };
 
