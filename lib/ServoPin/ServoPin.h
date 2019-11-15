@@ -1,5 +1,5 @@
-#ifndef ___Class_Resucue
-#define ___Class_Resucue
+#ifndef ___Class_ServoPin
+#define ___Class_ServoPin
 #include "ServoPin.h"
 #include "ServoPin.cpp"
 #include "Servo.h"
@@ -11,11 +11,10 @@ class ServoPin{
         Servo myServo;
 
     public:
-        Rescue();
-        bool Judge();
-        
-
-
+        ServoPin(int pin, Servo myServo);
+        void write(int angle);
+        int getPinNumber();
+        Servo getServoName();
 };
 
 #endif

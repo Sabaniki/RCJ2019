@@ -12,23 +12,40 @@
 #include "ColorSensor.cpp"
 #include "PhotoReflector.h"
 #include "PhotoReflector.cpp"
+#include "ServoPin.h"
+#include "ServoPin.cpp"
 #include "Variables.h"
 
 class Rescue{
     private:
-        Move manager
-        Motor motorL, motorR
-        RotaryEncoder rotaryEncoder
+        Move manager;
 
         ServoPin servos[2]{
-            ServoPin()
-        }
+            ServoPin(SRV_PIN_1,SRV_NAME_1),
+            ServoPin(SRV_NAME_2,SRV_PIN_2)
+        };
+
+        UltrasonicSensor ultrasonicSensors[2]{
+            UltrasonicSensor(ULT_TRIG_PIN_1,ULT_ECHO_PIN_1),
+            UltrasonicSensor(ULT_TRIG_PIN_2,ULT_ECHO_PIN_2)
+        };
+
+        RotaryEncoder rotaryEncoders[2]{
+            RotaryEncoder(ROTARY_ENCODER_READER_PIN_1),
+            RotaryEncoder(ROTARY_ENCODER_READER_PIN_2)
+        };
+
+        const int length = BLOCK_LENGTH;
+        const int speed = SPEED;
+        const int slowSpeed = SLOW_SPEED;
     public:
         Rescue();
-        bool Judge();
-
-
-
+        bool judge();
+        void goStraight(int distance);
+        void left90();
+        void right90();
+        void up();
+        void down();
 };
 
 #endif
