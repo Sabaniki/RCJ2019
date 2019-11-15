@@ -3,6 +3,7 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+.vscode/settings.json
 mkcc.sh
 脳内デバッグ用疑似コース
 RCJ2019.code-workspace

@@ -1,7 +1,7 @@
 #include "Linetracer.h"
 #include "Arduino.h"
-#include "PhotoReflector.h"
-#include "PhotoReflector.cpp"
+// #include "PhotoReflector.h"
+// #include "PhotoReflector.cpp"
 #include "Motor.h"
 #include "Motor.cpp"
 #include "Move.h"
@@ -27,8 +27,37 @@ inline void Linetracer::adjustment(){
         manager.write(0, -slowSpeed);       // 右の車輪を後退
 }
 
+void Linetracer::newKingOfJudge(){
+    bool whileBlackLine[5] = { false, false, false, false, false };
+    bool readLR[2] = { false, false };
+    int leftPower, rightPower;
+    while (true){
+        for (size_t i = 0; i < 5; i++) whileBlackLine[i] = lineSensors[i].read();
+        if(whileBlackLine[L]) readLR[0] = true;
+        else if(whileBlackLine[R]) readLR[1] = true;
+        if(!(whileBlackLine[LL] && whileBlackLine[RR])) break;
+        manager.back(slowSpeed);
+    }
+    manager.stop(false);
+    delay(5);
+    if (whileBlackLine[LL]){
+        leftPower = 0;
+        rightPower = speed;
+        if(!readLR[0]) rightPower *= -1;
+        while (!lineSensors[L].read()) manager.write(leftPower, rightPower);
+    }
+    else{
+        leftPower = speed;
+        rightPower = 0;
+        if(!readLR[1]) leftPower *= -1;
+        while (!lineSensors[R].read()) manager.write(leftPower, rightPower);
+    }
+    manager.stop(false);
+    delay(5);
+}
+
 Linetracer::Colors Linetracer::judgeColor(){
-    adjustment();
+    // adjustment();
     int result = 0;
     if(colorSensors[0].irradiateRed()) result++;
     if(colorSensors[1].irradiateRed()) result += 2;
@@ -37,26 +66,32 @@ Linetracer::Colors Linetracer::judgeColor(){
 
 void Linetracer::right90(){
     manager.stop(false);
-    while (phts[C].read())
+    while (lineSensors[C].read())
         manager.right(slowSpeed, true);
-    while (!phts[C].read())
+    while (!lineSensors[C].read())
         manager.right(slowSpeed, true);
 }
 
 void Linetracer::left90(){
     manager.stop(false);
-    while (phts[C].read())
+    while (lineSensors[C].read())
         manager.left(slowSpeed, true);
-    while (!phts[C].read())
+    while (!lineSensors[C].read())
         manager.left(slowSpeed, true);
 }
 
-void Linetracer::run(){
-    for (size_t i = 0; i < 5; i++)  lineResult[i] = phts[i].read();
+bool Linetracer::run(){
+    for (size_t i = 0; i < 5; i++)  lineResult[i] = lineSensors[i].read();
+    for (size_t i = 0; i < 5; i++){
+        Serial.print(lineResult[i]);
+        Serial.print(", ");
+    }
+    Serial.println("");
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
     if(lineResult[LL] || lineResult[RR]) {
+        Serial.println("LL | RR");
         REN = 0;
         Linetracer::Colors colorResult = judgeColor();
         if(!colorResult){
@@ -79,19 +114,25 @@ void Linetracer::run(){
             right90();
             right90();
         }
+        manager.stop(false);
     }
     if(lineResult[L]){
+        Serial.println("L");
         REN++;
         manager.left(speed, true);
     }
-    if(lineResult[R]){
+    else if(lineResult[R]){
+        Serial.println("R");
         REN++;
         manager.right(speed, true);
     }
     else {
+        Serial.println("Straight");
         REN = 0;
         manager.straight(speed);
     }
     if(REN > THRESHOLD_REN)
         manager.straight(slowSpeed, RENlength);
+    delay(1);
+    return true;
 }

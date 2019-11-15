@@ -5,9 +5,12 @@
 void setup() {
 	
 	// put your setup code here, to run once:
+	Serial.begin(9600);
 }
 
 void loop() {
 	auto tracer = new Linetracer();
-	while(true) tracer->run();
+	delay(1000);
+	while(tracer->run());
+	while(true/* resucue->run() */);
 }
