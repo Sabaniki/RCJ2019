@@ -29,31 +29,50 @@ bool Rescue::judge(){
     return result;
 }
 
-void Rescue::goStraight(int distance){
-    int diff = 0;
-    int leftpower,rightpower;
-    bool state[2] = {false,false};
-    while((state[0] = rotaryEncoders[0].until(distance)) && (state[1] = rotaryEncoders[1].until(distance))){
-        diff = rotaryEncoders[0].getCurrentCount() - rotaryEncoders[1].getCurrentCount();//まっすぐ走るための調整動作
-        if(diff < -10){
-            leftpower = speed;
-            rightpower = 0;
-        }
-        else if(diff > 10){
-            leftpower = 0;
-            rightpower = speed;
-        }
-        else{
-            leftpower = speed;
-            rightpower = speed;
-        }
-        if(!state[0])leftpower = 0;
-        if(!state[1])rightpower = 0;
-        manager.write(leftpower,rightpower);
+// void Rescue::goStraight(int distance){
+//     int diff = 0;
+//     int leftpower,rightpower;
+//     bool state[2] = {false,false};
+//     while((state[0] = rotaryEncoders[0].until(distance)) && (state[1] = rotaryEncoders[1].until(distance))){
+//         diff = rotaryEncoders[0].getCurrentCount() - rotaryEncoders[1].getCurrentCount();//まっすぐ走るための調整動作
+//         if(diff < -10){
+//             leftpower = speed;
+//             rightpower = 0;
+//         }
+//         else if(diff > 10){
+//             leftpower = 0;
+//             rightpower = speed;
+//         }
+//         else{
+//             leftpower = speed;
+//             rightpower = speed;
+//         }
+//         if(!state[0])leftpower = 0;
+//         if(!state[1])rightpower = 0;
+//         manager.write(leftpower,rightpower);
 
-    }    
-    manager.stop(true);
-    delay(5);
+//     }    
+//     manager.stop(true);
+//     delay(5);
+// }
+
+void Rescue::goStraight(int distance){  //脳内デバッグ一切してないから間違ってるかもしれんけどこんな感じのことが提案したかった
+    int leftPower = 0, rightPower = 0;
+    const int L = 0, R = 1;
+    bool state[2] = { true,true };
+    while (state[L] || state[R]){
+        if(state[L] && rotaryEncoders[L].until(distance)) leftPower = speed;
+        else {
+            state[L] = false
+            leftPower = 0;
+        }
+        if(state[R] && rotaryEncoders[R].until(distance)) rightPower = speed
+        else {
+            state[R] = false
+            rightPower = 0;
+        }
+        manager.write(leftPower, rightPower);
+    }
 }
 
 void Rescue::left90(){
@@ -61,8 +80,8 @@ void Rescue::left90(){
     int leftpower = -slowSpeed;
     int rightpower = slowSpeed;
     while(rotaryEncoders[0].until(LEFT90) && rotaryEncoders[1].until(LEFT90)){
-        if(!state[0])leftpower = 0;
-        if(!state[1])rightpower = 0;
+        if(!state[0])leftpower = 0; //←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
+        if(!state[1])rightpower = 0;//←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
         manager.write(leftpower,rightpower);
     }
 }
@@ -72,8 +91,8 @@ void Rescue::right90(){
     int leftpower = slowSpeed;
     int rightpower = -slowSpeed;
     while(rotaryEncoders[0].until(RIGHT90) && rotaryEncoders[1].until(RIGHT90)){
-        if(!state[0])leftpower = 0;
-        if(!state[1])rightpower = 0;
+        if(!state[0])leftpower = 0; //←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
+        if(!state[1])rightpower = 0;//←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
         manager.write(leftpower,rightpower);
     }
 }
