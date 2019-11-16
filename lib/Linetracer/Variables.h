@@ -4,7 +4,7 @@
 #define LINE_SENSOR_THRESHOLD_2 300
 #define LINE_SENSOR_THRESHOLD_3 600
 #define LINE_SENSOR_THRESHOLD_4 400
-#define LINE_SENSOR_THRESHOLD_5 270
+#define LINE_SENSOR_THRESHOLD_5 300
 #define LINE_SENSOR_PIN_1 A2
 #define LINE_SENSOR_PIN_2 A4
 #define LINE_SENSOR_PIN_3 A5
@@ -35,7 +35,7 @@
 #define REN_LENGTH 10
 
 //----- 速度 -----//
-#define SPEED 120
+#define SPEED 100
 #define SLOW_SPEED 50
 
 //----- その他 -----//

@@ -58,6 +58,7 @@ void Linetracer::newKingOfJudge(){
 
 Linetracer::Colors Linetracer::judgeColor(){
     // adjustment();
+    // newKingOfJudge();
     int result = 0;
     if(colorSensors[0].irradiateRed()) result++;
     if(colorSensors[1].irradiateRed()) result += 2;
@@ -81,6 +82,7 @@ void Linetracer::left90(){
 }
 
 bool Linetracer::run(){
+    delay(1);
     for (size_t i = 0; i < 5; i++)  lineResult[i] = lineSensors[i].read();
     for (size_t i = 0; i < 5; i++){
         Serial.print(lineResult[i]);
@@ -90,10 +92,12 @@ bool Linetracer::run(){
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
-    if(lineResult[LL] || lineResult[RR]) {
+    if((lineResult[LL] && lineResult[L]) || (lineResult[R] && lineResult[RR])) {
         Serial.println("LL | RR");
         REN = 0;
         Linetracer::Colors colorResult = judgeColor();
+        Serial.print("color: ");
+        Serial.println(Linetracer::Colors(colorResult));
         if(!colorResult){
             int blackSum = 0;
             for (size_t i = 0; i < 5; i++) blackSum += lineResult[i];
@@ -116,12 +120,12 @@ bool Linetracer::run(){
         }
         manager.stop(false);
     }
-    if(lineResult[L]){
+    if(lineResult[L] || lineResult[LL]){
         Serial.println("L");
         REN++;
         manager.left(speed, true);
     }
-    else if(lineResult[R]){
+    else if(lineResult[R] || lineResult[RR]){
         Serial.println("R");
         REN++;
         manager.right(speed, true);
