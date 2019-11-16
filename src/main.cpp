@@ -10,6 +10,7 @@ void setup() {
 void loop() {
 	auto tracer = new Linetracer();
 	delay(1000);
+	//digitalWrite(8, HIGH);
 	while(tracer->run());
 	while(true/* resucue->run() */);
 }
