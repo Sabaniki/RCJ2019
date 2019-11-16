@@ -11,20 +11,21 @@
 #include "UltrasonicSensor.h"
 #include "UltrasonicSensor.cpp"
 #include "Arduino.h"
-Rescue::Rescue(){
+Rescue::Rescue()
+{
     manager(
         Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
         Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
-        RotaryEncoder(ROTARY_ENCODER_READER_PIN)
-    )
+        RotaryEncoder(ROTARY_ENCODER_READER_PIN))
 }
 
-bool Rescue::judge(){
+bool Rescue::judge()
+{
     bool result = false;
-    int distances[2] = {0,0}
-    for(size_t i = 0; i < 2; i++)
+    int distances[2] = { 0,
+                         0 } for (size_t i = 0; i < 2; i++)
         distances[i] = ultrasonicSensors[i].readDistance();
-    if(ultrasonicSensors[0] < length && ultrasonicSensor[1] < length)
+    if (ultrasonicSensors[0] < length && ultrasonicSensor[1] < length)
         result = true;
     return result;
 }
@@ -33,7 +34,7 @@ bool Rescue::judge(){
 //     int diff = 0;
 //     int leftpower,rightpower;
 //     bool state[2] = {false,false};
-//     while((state[0] = rotaryEncoders[0].until(distance)) && (state[1] = rotaryEncoders[1].until(distance))){
+//     while((state[0] = rotaryEncoders[0].until(distance)) || (state[1] = rotaryEncoders[1].until(distance))){
 //         diff = rotaryEncoders[0].getCurrentCount() - rotaryEncoders[1].getCurrentCount();//まっすぐ走るための調整動作
 //         if(diff < -10){
 //             leftpower = speed;
@@ -51,60 +52,89 @@ bool Rescue::judge(){
 //         if(!state[1])rightpower = 0;
 //         manager.write(leftpower,rightpower);
 
-//     }    
+//     }
 //     manager.stop(true);
 //     delay(5);
 // }
 
-void Rescue::goStraight(int distance){  //脳内デバッグ一切してないから間違ってるかもしれんけどこんな感じのことが提案したかった
+void Rescue::goStraight(int distance)
+{ //脳内デバッグ一切してないから間違ってるかもしれんけどこんな感じのことが提案したかった
     int leftPower = 0, rightPower = 0;
     const int L = 0, R = 1;
-    bool state[2] = { true,true };
-    while (state[L] || state[R]){
-        if(state[L] && rotaryEncoders[L].until(distance)) leftPower = speed;
-        else {
-            state[L] = false
+    bool state[2] = {true, true};
+    while (state[L] || state[R])
+    {
+        for (int i = 0; i < 2; i++)
+            if (state[i])
+                state[i] = rotaryEncoders[i].until(distance);
+        if (state[L])
+            leftPower = speed;
+        else
+        {
+            state[L] = false;
             leftPower = 0;
         }
-        if(state[R] && rotaryEncoders[R].until(distance)) rightPower = speed
-        else {
-            state[R] = false
+        if (state[R])
+            rightPower = speed 
+        else
+        {
+            state[R] = false;
             rightPower = 0;
         }
         manager.write(leftPower, rightPower);
     }
+    manager.stop(false);
 }
 
-void Rescue::left90(){
+void Rescue::left90()
+{
     manager.stop(true);
     int leftpower = -slowSpeed;
     int rightpower = slowSpeed;
-    while(rotaryEncoders[0].until(LEFT90) && rotaryEncoders[1].until(LEFT90)){
-        if(!state[0])leftpower = 0; //←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
-        if(!state[1])rightpower = 0;//←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
-        manager.write(leftpower,rightpower);
+    bool state[2] = {true, true};
+
+    while (state[0] || state[1])
+    {
+        for (int i = 0; i < 2; i++)
+            if (state[i])
+                state[i] = rotaryEncoders[i].until(LEFT90);
+        if (!state[0])
+            leftpower = 0; //←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
+        if (!state[1])
+            rightpower = 0; //←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
+        manager.write(leftpower, rightpower);
     }
 }
 
-void Rescue::right90(){
+void Rescue::right90()
+{
     manager.stop(true);
     int leftpower = slowSpeed;
     int rightpower = -slowSpeed;
-    while(rotaryEncoders[0].until(RIGHT90) && rotaryEncoders[1].until(RIGHT90)){
-        if(!state[0])leftpower = 0; //←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
-        if(!state[1])rightpower = 0;//←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
-        manager.write(leftpower,rightpower);
+    bool state[2] = {true, true};
+
+    while (state[0] || state[1])
+    {
+        for (int i = 0; i < 2; i++)
+            if (state[i])
+                state[i] = rotaryEncoders[i].until(RIGHT90);
+        if (!state[0])
+            leftpower = 0; //←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
+        if (!state[1])
+            rightpower = 0; //←おれの手元ではResucue.hにstate[2]: {bool, bool} が定義されてないけどこれは…？
+        manager.write(leftpower, rightpower);
     }
 }
 
-void Rescue::up(int mode){
+void Rescue::up(int mode)
+{
     switch (mode)
     {
-    case 1://front(arm)をあげる
-    rotaryEncoders[0].write(FRONT_UP_ANGLE);
+    case 1: //front(arm)をあげる
+        rotaryEncoders[0].write(FRONT_UP_ANGLE);
         break;
-    case 2://back(tail)をあげる
-    rotaryEncoders[1].write(BACK_UP_ANGLE);
+    case 2: //back(tail)をあげる
+        rotaryEncoders[1].write(BACK_UP_ANGLE);
         break;
     default:
         break;
@@ -112,14 +142,15 @@ void Rescue::up(int mode){
     delay(500);
 }
 
-void Rescue::down(int mode){
+void Rescue::down(int mode)
+{
     switch (mode)
     {
-    case 1://front(arm)をさげる
-    rotaryEncoders[0].write(FRONT_DOWN_ANGLE);
+    case 1: //front(arm)をさげる
+        rotaryEncoders[0].write(FRONT_DOWN_ANGLE);
         break;
-    case 2://back(tail)をさげる
-    rotaryEncoders[1].write(BACK_DOWN_ANGLE);
+    case 2: //back(tail)をさげる
+        rotaryEncoders[1].write(BACK_DOWN_ANGLE);
         break;
     default:
         break;
