@@ -16,6 +16,8 @@
 #define ULT_TRIG_PIN_1 -1
 #define ULT_TRIG_PIN_2 -1
 //----- タッチセンサー -----//
+#define SW_PIN_1 -1
+#define SW_PIN_2 -1
 
 //----- ロータリーエンコーダ -----//
 #define ROTARY_ENCODER_READER_PIN_1 -1

@@ -11,8 +11,6 @@
 #include "PhotoReflector.cpp"
 #include "UltrasonicSensor.h"
 #include "UltrasonicSensor.cpp"
-#include "ServoPin.h"
-#include "ServoPin.cpp"
 #include "Servo.h"
 #include "RescueVariables.h"
 #include "Variables.h"
@@ -22,11 +20,7 @@ class Rescue{
         Move manager;
         Servo front;
         Servo back;
-        ServoPin servos[2]{
-            ServoPin(SRV_PIN_1,front),
-            ServoPin(SRV_PIN_2,back)
-        };
-
+        DigitalPin input1()
         UltrasonicSensor ultrasonicSensors[2]{
             UltrasonicSensor(ULT_TRIG_PIN_1,ULT_ECHO_PIN_1),
             UltrasonicSensor(ULT_TRIG_PIN_2,ULT_ECHO_PIN_2)

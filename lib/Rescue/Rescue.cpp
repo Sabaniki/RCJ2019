@@ -17,6 +17,8 @@ Rescue::Rescue() : manager(
                        Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
                        RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_RRTE))
 {
+    front.attach(SRV_PIN_1);
+    back.attach(SRV_PIN_2);
 }
 
 bool Rescue::judge()
@@ -104,15 +106,15 @@ void Rescue::up(int mode)
     switch (mode)
     {
     case 1: //front(arm)をあげる
-        servos[0].write(FRONT_UP_ANGLE);
+        front.write(FRONT_UP_ANGLE);
         break;
     case 2: //back(tail)をあげる
-        servos[1].write(BACK_UP_ANGLE);
+        back.write(BACK_UP_ANGLE);
         break;
     case 3:
         for (int i = FRONT_DOWN_ANGLE; i < FRONT_UP_ANGLE; i += 5)
         {
-            servos[0].write(i);
+            front.write(i);
             delay(10);
         }
         break;
@@ -120,7 +122,7 @@ void Rescue::up(int mode)
     case 4:
         for (int i = BACK_DOWN_ANGLE; i < BACK_UP_ANGLE; i += 5)
         {
-            servos[1].write(i);
+            back.write(i);
             delay(10);
         }
         break;
@@ -137,16 +139,16 @@ void Rescue::down(int mode)
     switch (mode)
     {
     case 1: //front(arm)をさげる
-        servos[0].write(FRONT_DOWN_ANGLE);
+        front.write(FRONT_DOWN_ANGLE);
         break;
     case 2: //back(tail)をさげる
-        servos[1].write(BACK_DOWN_ANGLE);
+        back.write(BACK_DOWN_ANGLE);
         break;
 
     case 3:
         for (int i = FRONT_UP_ANGLE; i > FRONT_DOWN_ANGLE; i -= 5)
         {
-            servos[0].write(i);
+            front.write(i);
             delay(10);
         }
         break;
@@ -154,7 +156,7 @@ void Rescue::down(int mode)
     case 4:
         for (int i = BACK_UP_ANGLE; i > BACK_DOWN_ANGLE; i -= 5)
         {
-            servos[1].write(i);
+            back.write(i);
             delay(10);
         }
         break;
