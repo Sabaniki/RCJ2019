@@ -84,6 +84,8 @@ void Linetracer::left90(){
 bool Linetracer::run(){
     delay(1);
     for (size_t i = 0; i < 5; i++)  lineResult[i] = lineSensors[i].read();
+    for (size_t i = 0; i < 5; i++) blackSum += lineResult[i];
+    
     for (size_t i = 0; i < 5; i++){
         Serial.print(lineResult[i]);
         Serial.print(", ");
@@ -92,15 +94,15 @@ bool Linetracer::run(){
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
-    if((lineResult[LL] && lineResult[L]) || (lineResult[R] && lineResult[RR])) {
-        Serial.println("LL | RR");
+    if(blackSum > 3) {
+        Serial.println("blackSum > 3");
         REN = 0;
         Linetracer::Colors colorResult = judgeColor();
         Serial.print("color: ");
         Serial.println(Linetracer::Colors(colorResult));
         if(!colorResult){
             int blackSum = 0;
-            for (size_t i = 0; i < 5; i++) blackSum += lineResult[i];
+            for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
             if(blackSum >= 3) manager.straight(speed, straightLength);
             else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
                 left90();
@@ -120,12 +122,20 @@ bool Linetracer::run(){
         }
         manager.stop(false);
     }
-    if(lineResult[L] || lineResult[LL]){
+    if(lineResult[LL]){
+        Serial.println("left 90");
+        left90();
+    }
+    else if(lineResult[RR]){
+        Serial.println("right 90");
+        right90();
+    }
+    if(lineResult[L]){
         Serial.println("L");
         REN++;
         manager.left(speed, true);
     }
-    else if(lineResult[R] || lineResult[RR]){
+    else if(lineResult[R]){
         Serial.println("R");
         REN++;
         manager.right(speed, true);
@@ -139,4 +149,5 @@ bool Linetracer::run(){
         manager.straight(slowSpeed, RENlength);
     delay(1);
     return true;
+    blackSum = 0;
 }
