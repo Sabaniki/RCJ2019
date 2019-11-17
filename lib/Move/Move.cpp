@@ -19,11 +19,15 @@ void Move::straight(int speed){
     motorR.write(speed);
 }
 
+// NOT USING ROTARYENCODER
 void Move::straight(int speed, int length){ 
-    while(rotaryEncoder.until(length)){
-        motorL.write(speed);
-        motorR.write(speed);
-    }
+    motorL.write(speed);
+    motorR.write(speed);
+    delay(length);
+    // while(rotaryEncoder.until(length)){
+    //     motorL.write(speed);
+    //     motorR.write(speed);
+    // }
 }
 
 void Move::back(int speed){

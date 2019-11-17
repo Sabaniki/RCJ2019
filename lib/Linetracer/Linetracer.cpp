@@ -67,6 +67,7 @@ Linetracer::Colors Linetracer::judgeColor(){
 
 void Linetracer::right90(){
     manager.stop(false);
+    manager.straight(slowSpeed, 150);
     while (lineSensors[C].read())
         manager.right(slowSpeed, true);
     while (!lineSensors[C].read())
@@ -75,6 +76,7 @@ void Linetracer::right90(){
 
 void Linetracer::left90(){
     manager.stop(false);
+    manager.straight(slowSpeed, 150);
     while (lineSensors[C].read())
         manager.left(slowSpeed, true);
     while (!lineSensors[C].read())
