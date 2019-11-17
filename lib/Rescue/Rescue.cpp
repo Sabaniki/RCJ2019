@@ -30,33 +30,6 @@ bool Rescue::judge()
     return result;
 }
 
-// void Rescue::goStraight(int distance){
-//     int diff = 0;
-//     int leftpower,rightpower;
-//     bool state[2] = {false,false};
-//     while((state[0] = rotaryEncoders[0].until(distance)) || (state[1] = rotaryEncoders[1].until(distance))){
-//         diff = rotaryEncoders[0].getCurrentCount() - rotaryEncoders[1].getCurrentCount();//まっすぐ走るための調整動作
-//         if(diff < -10){
-//             leftpower = speed;
-//             rightpower = 0;
-//         }
-//         else if(diff > 10){
-//             leftpower = 0;
-//             rightpower = speed;
-//         }
-//         else{
-//             leftpower = speed;
-//             rightpower = speed;
-//         }
-//         if(!state[0])leftpower = 0;
-//         if(!state[1])rightpower = 0;
-//         manager.write(leftpower,rightpower);
-
-//     }
-//     manager.stop(true);
-//     delay(5);
-// }
-
 void Rescue::goStraight(int distance)
 { //脳内デバッグ一切してないから間違ってるかもしれんけどこんな感じのことが提案したかった
     int leftPower = 0, rightPower = 0;
@@ -75,12 +48,11 @@ void Rescue::goStraight(int distance)
             leftPower = 0;
         }
         if (state[R])
-            rightPower = speed 
-        else
-        {
-            state[R] = false;
-            rightPower = 0;
-        }
+            rightPower = speed else
+            {
+                state[R] = false;
+                rightPower = 0;
+            }
         manager.write(leftPower, rightPower);
     }
     manager.stop(false);
@@ -131,12 +103,29 @@ void Rescue::up(int mode)
     switch (mode)
     {
     case 1: //front(arm)をあげる
-        rotaryEncoders[0].write(FRONT_UP_ANGLE);
+        servos[0].write(FRONT_UP_ANGLE);
         break;
     case 2: //back(tail)をあげる
-        rotaryEncoders[1].write(BACK_UP_ANGLE);
+        servos[1].write(BACK_UP_ANGLE);
         break;
+    case 3:
+        for (int i = FRONT_DOWN_ANGLE; i < FRONT_UP_ANGLE; i += 5)
+        {
+            servos[0].write(i);
+            delay(10);
+        }
+        break;
+
+    case 4:
+        for (int i = BACK_DOWN_ANGLE; i < BACK_UP_ANGLE; i += 5)
+        {
+            servos[1].write(i);
+            delay(10);
+        }
+        break;
+
     default:
+        //Serial.println("default");
         break;
     }
     delay(500);
@@ -147,14 +136,35 @@ void Rescue::down(int mode)
     switch (mode)
     {
     case 1: //front(arm)をさげる
-        rotaryEncoders[0].write(FRONT_DOWN_ANGLE);
+        servos[0].write(FRONT_DOWN_ANGLE);
         break;
     case 2: //back(tail)をさげる
-        rotaryEncoders[1].write(BACK_DOWN_ANGLE);
+        servos[1].write(BACK_DOWN_ANGLE);
         break;
+
+    case 3:
+        for (int i = FRONT_UP_ANGLE; i > FRONT_DOWN_ANGLE; i -= 5)
+        {
+            servos[0].write(i);
+            delay(10);
+        }
+        break;
+
+    case 4:
+        for (int i = BACK_UP_ANGLE; i > BACK_DOWN_ANGLE; i -= 5)
+        {
+            servos[1].write(i);
+            delay(10);
+        }
+        break;
+
     default:
         break;
     }
     delay(500);
+}
+
+bool Rescue::run(){
+    
 }
 #endif

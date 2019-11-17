@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include "Linetracer.h"
 #include "Linetracer.cpp"
+#include "Rescue.h"
+#include "Rescue.cpp"
 
 void setup() {
 	

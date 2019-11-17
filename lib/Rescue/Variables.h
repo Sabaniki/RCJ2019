@@ -9,6 +9,8 @@
 #define BACK_DOWN_ANGLE 0
 #define FRONT 1
 #define BACK 2
+#define GRADUALLY_FRONT 3
+#define GRADUALLY_BACK 4
 
 //----- 超音波 -----//
 #define ULT_ECHO_PIN_1 -1
