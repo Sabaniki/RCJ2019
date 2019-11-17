@@ -1,7 +1,7 @@
 #include "Linetracer.h"
 #include "Arduino.h"
-// #include "PhotoReflector.h"
-// #include "PhotoReflector.cpp"
+#include "PhotoReflector.h"
+#include "PhotoReflector.cpp"
 #include "Motor.h"
 #include "Motor.cpp"
 #include "Move.h"
@@ -15,7 +15,7 @@ Linetracer::Linetracer():
     manager(
         Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
         Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
-        RotaryEncoder(ROTARY_ENCODER_READER_PIN)
+        RotaryEncoder(ROTARY_ENCODER_READER_PIN,100)
     ) {
 }
 

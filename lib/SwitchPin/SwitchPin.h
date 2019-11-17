@@ -1,7 +1,6 @@
 #ifndef ___Class_SwitchPin
 #define ___Class_SwitchPin
 
-
 class SwitchPin{
     private:
         DigitalPin input;

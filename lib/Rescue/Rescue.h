@@ -1,9 +1,6 @@
-#ifndef ___Class_Resucue
-#define ___Class_Resucue
-#include "Rescue.h"
-#include "Rescue.cpp"
-#include "Motor.h"
-#include "Motor.cpp"
+#ifndef ___Class_Rescue
+#define ___Class_Rescue
+
 #include "RotaryEncoder.h"
 #include "RotaryEncoder.cpp"
 #include "Move.h"
@@ -12,17 +9,22 @@
 #include "ColorSensor.cpp"
 #include "PhotoReflector.h"
 #include "PhotoReflector.cpp"
+#include "UltrasonicSensor.h"
+#include "UltrasonicSensor.cpp"
 #include "ServoPin.h"
 #include "ServoPin.cpp"
+#include "Servo.h"
+#include "RescueVariables.h"
 #include "Variables.h"
 
 class Rescue{
     private:
         Move manager;
-
+        Servo front;
+        Servo back;
         ServoPin servos[2]{
-            ServoPin(SRV_PIN_1,SRV_NAME_1),
-            ServoPin(SRV_NAME_2,SRV_PIN_2)
+            ServoPin(SRV_PIN_1,front),
+            ServoPin(SRV_PIN_2,back)
         };
 
         UltrasonicSensor ultrasonicSensors[2]{
@@ -31,8 +33,8 @@ class Rescue{
         };
 
         RotaryEncoder rotaryEncoders[2]{
-            RotaryEncoder(ROTARY_ENCODER_READER_PIN_1),
-            RotaryEncoder(ROTARY_ENCODER_READER_PIN_2)
+            RotaryEncoder(ROTARY_ENCODER_READER_PIN_1,THRESHOLD_RRTE),
+            RotaryEncoder(ROTARY_ENCODER_READER_PIN_2,THRESHOLD_RRTE)
         };
 
         const int length = BLOCK_LENGTH;
@@ -44,8 +46,9 @@ class Rescue{
         void goStraight(int distance);
         void left90();
         void right90();
-        void up();
-        void down();
+        void up(int mode);
+        void down(int mode);
+        bool run();
 };
 
 #endif

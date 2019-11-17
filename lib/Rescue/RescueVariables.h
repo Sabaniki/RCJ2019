@@ -1,8 +1,6 @@
 //----- サーボ -----//
 #define SRV_PIN_1 -1
 #define SRV_PIN_2 -1
-#define SRV_NAME_1 front
-#define SRV_NAME_2 back
 #define FRONT_UP_ANGLE 90
 #define FRONT_DOWN_ANGLE 0
 #define BACK_UP_ANGLE 90
@@ -27,3 +25,4 @@
 
 //----- その他 -----//
 #define BLOCK_LENGTH -1
+#define THRESHOLD_RRTE 100

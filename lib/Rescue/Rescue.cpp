@@ -1,5 +1,6 @@
 #ifndef ___Cpp_Resucue
 #define ___Cpp_Resucue
+#include "Arduino.h"
 #include "Rescue.h"
 #include "Rescue.cpp"
 #include "Motor.h"
@@ -10,22 +11,21 @@
 #include "RotaryEncoder.cpp"
 #include "UltrasonicSensor.h"
 #include "UltrasonicSensor.cpp"
-#include "Arduino.h"
-Rescue::Rescue()
+
+Rescue::Rescue() : manager(
+                       Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
+                       Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
+                       RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_RRTE))
 {
-    manager(
-        Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
-        Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
-        RotaryEncoder(ROTARY_ENCODER_READER_PIN))
 }
 
 bool Rescue::judge()
 {
     bool result = false;
-    int distances[2] = { 0,
-                         0 } for (size_t i = 0; i < 2; i++)
+    int distances[2] = {0, 0};
+    for (size_t i = 0; i < 2; i++)
         distances[i] = ultrasonicSensors[i].readDistance();
-    if (ultrasonicSensors[0] < length && ultrasonicSensor[1] < length)
+    if (distances[0] < length && distances[1] < length)
         result = true;
     return result;
 }
@@ -48,11 +48,12 @@ void Rescue::goStraight(int distance)
             leftPower = 0;
         }
         if (state[R])
-            rightPower = speed else
-            {
-                state[R] = false;
-                rightPower = 0;
-            }
+            rightPower = speed;
+        else
+        {
+            state[R] = false;
+            rightPower = 0;
+        }
         manager.write(leftPower, rightPower);
     }
     manager.stop(false);
@@ -164,7 +165,7 @@ void Rescue::down(int mode)
     delay(500);
 }
 
-bool Rescue::run(){
-    
+bool Rescue::run()
+{
 }
 #endif
