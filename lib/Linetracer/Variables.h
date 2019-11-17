@@ -25,8 +25,8 @@
 #define MOTOR_L_FRONT_PIN 3
 #define MOTOR_L_BACK_PIN 2
 
-#define MOTOR_R_FRONT_PIN 4
-#define MOTOR_R_BACK_PIN 5
+#define MOTOR_R_FRONT_PIN 5
+#define MOTOR_R_BACK_PIN 4
 
 //----- ロータリーエンコーダ -----//
 #define ROTARY_ENCODER_READER_PIN -1
