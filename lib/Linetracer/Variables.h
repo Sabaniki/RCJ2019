@@ -1,5 +1,5 @@
 //----- ラインセンサ -----//
-#define LINE_GREEN_PIN 8
+#define LINE_GREEN_PIN 15
 #define LINE_SENSOR_THRESHOLD_1 300
 #define LINE_SENSOR_THRESHOLD_2 300
 #define LINE_SENSOR_THRESHOLD_3 600
@@ -12,8 +12,8 @@
 #define LINE_SENSOR_PIN_5 A2
 
 //----- カラーセンサ -----//
-#define COLOR_SENSOR_RED_PIN 9
-#define COLOR_SENSOR_GREEN_PIN 8
+#define COLOR_SENSOR_RED_PIN 15
+#define COLOR_SENSOR_GREEN_PIN 14
 
 #define COLOR_SENSOR_L_READER_PIN A6  
 #define COLOR_SENSOR_R_READER_PIN A1
