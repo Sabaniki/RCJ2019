@@ -10,12 +10,14 @@
 #include "ColorSensor.cpp"
 #include "RotaryEncoder.h"
 #include "RotaryEncoder.cpp"
+#include "KuromikaLine.h"
+#include "KuromikaLine.cpp"
 
 Linetracer::Linetracer():
     manager(
         Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
         Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
-        RotaryEncoder(ROTARY_ENCODER_READER_PIN)
+        RotaryEncoder(ROTARY_ENCODER_READER_PIN, -1)
     ) {
 }
 
@@ -70,8 +72,15 @@ void Linetracer::right90(){
     manager.straight(slowSpeed, 150);
     while (lineSensors[C].read())
         manager.right(slowSpeed, true);
+    Serial.println("right90 1");
+    manager.stop(false);
+    Serial.println("stop now");
     while (!lineSensors[C].read())
         manager.right(slowSpeed, true);
+    Serial.println("right90 2");
+    Serial.println("stop now");
+    manager.stop(false);
+    
 }
 
 void Linetracer::left90(){
@@ -79,13 +88,17 @@ void Linetracer::left90(){
     manager.straight(slowSpeed, 150);
     while (lineSensors[C].read())
         manager.left(slowSpeed, true);
+    Serial.println("left90 1");
     while (!lineSensors[C].read())
         manager.left(slowSpeed, true);
+    Serial.println("left90 2");
+    
 }
 
 bool Linetracer::run(){
-    delay(1);
+    delay(10);
     for (size_t i = 0; i < 5; i++)  lineResult[i] = lineSensors[i].read();
+    Serial.println();
     for (size_t i = 0; i < 5; i++) blackSum += lineResult[i];
     
     for (size_t i = 0; i < 5; i++){
@@ -94,62 +107,30 @@ bool Linetracer::run(){
     }
     Serial.println("");
 
-    // これだと大分条件がゆるいし比例もどきすらもできないので、
-    // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
-    if(blackSum > 3) {
-        Serial.println("blackSum > 3");
-        REN = 0;
-        Linetracer::Colors colorResult = judgeColor();
-        Serial.print("color: ");
-        Serial.println(Linetracer::Colors(colorResult));
-        if(!colorResult){
-            int blackSum = 0;
-            for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
-            if(blackSum >= 3) manager.straight(speed, straightLength);
-            else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
-                left90();
-            else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
-                right90();
-            else // 何か事故が起きてるので少し下がってみる
-                manager.back(speed, backLength);
-        }
-        // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
-        else if(colorResult == GW)
-            left90();
-        else if(colorResult == WG)
-            right90();
-        else if(colorResult == GG){
-            right90();
-            right90();
-        }
-        manager.stop(false);
-    }
     if(lineResult[LL]){
-        Serial.println("left 90");
-        left90();
+        Serial.println("LL");
+        //left90();
     }
-    else if(lineResult[RR]){
-        Serial.println("right 90");
-        right90();
-    }
-    if(lineResult[L]){
+    else if(lineResult[L]){
         Serial.println("L");
-        REN++;
         manager.left(speed, true);
+    }
+
+    if(lineResult[RR]){
+        Serial.println("RR");
+        //right90();
     }
     else if(lineResult[R]){
         Serial.println("R");
-        REN++;
         manager.right(speed, true);
     }
-    else {
-        Serial.println("Straight");
-        REN = 0;
-        manager.straight(speed);
+    else if(lineResult[RR] || lineResult[R]){
+        Serial.println("RR | R");
+        manager.right(speed, true);
     }
-    if(REN > THRESHOLD_REN)
-        manager.straight(slowSpeed, RENlength);
-    delay(1);
-    return true;
+
+    else manager.straight(speed);
+
     blackSum = 0;
+    return true;
 }
