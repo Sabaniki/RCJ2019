@@ -96,8 +96,8 @@ bool Linetracer::run(){
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
-    if(blackSum > 3) {
-        Serial.println("blackSum > 3");
+    if(blackSum >= 3) {
+        Serial.println("blackSum >= 3");
         REN = 0;
         Linetracer::Colors colorResult = judgeColor();
         Serial.print("color: ");
@@ -137,3 +137,4 @@ bool Linetracer::run(){
         REN++;
         manager.left(speed, true);
     }
+}
