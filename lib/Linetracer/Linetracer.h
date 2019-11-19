@@ -58,7 +58,6 @@ private:
     const int backLength = BACK_LENGH;
     int REN = 0;
     const int RENlength = REN_LENGTH;
-    int blackSum = 0;
 
 public:
     Linetracer();

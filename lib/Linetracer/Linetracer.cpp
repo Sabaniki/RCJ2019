@@ -15,7 +15,7 @@ Linetracer::Linetracer():
     manager(
         Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
         Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
-        RotaryEncoder(ROTARY_ENCODER_READER_PIN, -1)
+        RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_ROTARY_ENCODER)
     ) {
 }
 
@@ -67,7 +67,7 @@ Linetracer::Colors Linetracer::judgeColor(){
 
 void Linetracer::right90(){
     manager.stop(false);
-    manager.straight(slowSpeed, 150);
+    manager.straight(slowSpeed, STRAIGHT_LENGH);
     while (lineSensors[C].read())
         manager.right(slowSpeed, true);
     while (!lineSensors[C].read())
@@ -76,7 +76,7 @@ void Linetracer::right90(){
 
 void Linetracer::left90(){
     manager.stop(false);
-    manager.straight(slowSpeed, 150);
+    manager.straight(slowSpeed, STRAIGHT_LENGH);
     while (lineSensors[C].read())
         manager.left(slowSpeed, true);
     while (!lineSensors[C].read())
@@ -86,7 +86,6 @@ void Linetracer::left90(){
 bool Linetracer::run(){
     delay(1);
     for (size_t i = 0; i < 5; i++)  lineResult[i] = lineSensors[i].read();
-    for (size_t i = 0; i < 5; i++) blackSum += lineResult[i];
     
     for (size_t i = 0; i < 5; i++){
         Serial.print(lineResult[i]);
@@ -96,7 +95,7 @@ bool Linetracer::run(){
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
-    if(blackSum >= 3) {
+    if(lineResult[LL] ||  lineResult[RR]) {
         Serial.println("blackSum >= 3");
         REN = 0;
         Linetracer::Colors colorResult = judgeColor();
@@ -125,10 +124,12 @@ bool Linetracer::run(){
         manager.stop(false);
     }
     if(lineResult[LL]){
+        REN = 0;
         Serial.println("left 90");
         left90();
     }
     else if(lineResult[RR]){
+        REN = 0;
         Serial.println("right 90");
         right90();
     }
@@ -137,4 +138,18 @@ bool Linetracer::run(){
         REN++;
         manager.left(speed, true);
     }
+    else if(lineResult[R]){
+        Serial.println("R");
+        REN++;
+        manager.right(speed, true);
+    }
+    else {
+        Serial.println("Straight");
+        REN = 0;
+        manager.straight(speed);
+    }
+    if(REN > THRESHOLD_REN)
+        manager.straight(slowSpeed, RENlength);
+    delay(1);
+    return true;
 }

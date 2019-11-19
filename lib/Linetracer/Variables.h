@@ -33,6 +33,7 @@
 #define STRAIGHT_LENGH 30
 #define BACK_LENGH 10
 #define REN_LENGTH 10
+#define THRESHOLD_ROTARY_ENCODER 990
 
 //----- 速度 -----//
 #define SPEED 100
