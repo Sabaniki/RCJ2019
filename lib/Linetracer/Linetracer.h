@@ -58,7 +58,7 @@ private:
     void adjustment();
     void newKingOfJudge();
     Colors judgeColor();
-    const char* colorsToChar(Linetracer::Colors color, char* colorChar);
+    const char* colorsToChar(Linetracer::Colors color);
 
     const int speed = SPEED;
     const int slowSpeed = SLOW_SPEED;

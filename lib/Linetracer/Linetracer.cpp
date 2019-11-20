@@ -83,7 +83,7 @@ void Linetracer::left90(){
         manager.left(slowSpeed, true);
 }
 
-const char* Linetracer::colorsToChar(Linetracer::Colors color, char* colorChar){
+const char* Linetracer::colorsToChar(Linetracer::Colors color){
     switch (color){
         case WW: return "WW";
         case GW: return "GW";
@@ -106,11 +106,11 @@ bool Linetracer::run(){
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
     if(lineResult[LL] ||  lineResult[RR]) {
-        Serial.println("blackSum >= 3");
+        Serial.println("LL | RR");
         REN = 0;
         Linetracer::Colors colorResult = judgeColor();
         Serial.print("color: ");
-        Serial.println(Linetracer::Colors(colorResult));
+        Serial.println(colorsToChar(colorResult));
         if(!colorResult){
             int blackSum = 0;
             for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
