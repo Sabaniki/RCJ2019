@@ -7,10 +7,11 @@
 #include "RotaryEncoder.cpp"
 #include "Arduino.h"
 
-Move::Move(Motor motorL, Motor motorR, RotaryEncoder rotaryEncoder):
+Move::Move(Motor motorL, Motor motorR, RotaryEncoder rotaryEncoderL, RotaryEncoder rotaryEncoderR):
     motorL(motorL),
     motorR(motorR),
-    rotaryEncoder(rotaryEncoder) {
+    rotaryEncoderL(rotaryEncoderL),
+    rotaryEncoderR(rotaryEncoderR){
 
 }
 
@@ -36,10 +37,10 @@ void Move::back(int speed){
 }
 
 void Move::back(int speed, int length){
-    while(rotaryEncoder.until(length)){
-        motorL.write(-speed);
-        motorR.write(-speed);
-    }
+    // while(rotaryEncoder.until(length)){
+    //     motorL.write(-speed);
+    //     motorR.write(-speed);
+    // }
 }
 
 void  Move::right(int speed, bool rotate){
@@ -81,10 +82,4 @@ void Move::write(int leftSpeed, int rightSpeed){
 }
 
 // このメソッドあんまいらないかもしれない
-void Move::write(int leftSpeed, int rightSpeed, int length){
-    while(rotaryEncoder.until(length)){
-        motorL.write(leftSpeed);
-        motorR.write(rightSpeed);
-    }
-}
 #endif

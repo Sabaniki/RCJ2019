@@ -7,10 +7,10 @@
 class Move {
 private:
     Motor motorL, motorR;
-    RotaryEncoder rotaryEncoder;
+    RotaryEncoder rotaryEncoderR, rotaryEncoderL;
 
 public:
-    Move(Motor motorL, Motor motorR, RotaryEncoder rotaryEncoder);
+    Move(Motor motorL, Motor motorR, RotaryEncoder rotaryEncoderL, RotaryEncoder rotaryEncoderR);
     void straight(int speed);
     void straight(int speed, int length);
     void back(int speed);
