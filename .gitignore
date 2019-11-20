@@ -3,11 +3,8 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
-<<<<<<< HEAD
-.vscode/extensions.json
-=======
->>>>>>> Linetracer
 .vscode/settings.json
 mkcc.sh
 脳内デバッグ用疑似コース
 RCJ2019.code-workspace
+platformio.ini
