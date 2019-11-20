@@ -22,18 +22,25 @@ private:
         KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_4, LINE_SENSOR_THRESHOLD_4),
         KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_5, LINE_SENSOR_THRESHOLD_5),
     };
-    int colorThresholds[2] = { THRESHOLD_RED, THRESHOLD_GREEN };
+    const int colorThresholds[3][3] = { 
+        { 0, 4, 1 },    //G
+        { 4, 12, 4 },   //W
+        { 0, 1, 0 },    //B
+    };
+
     // {0: 左, 1: 右}
     ColorSensor colorSensors[2] = {
         ColorSensor(
             COLOR_SENSOR_RED_PIN,
             COLOR_SENSOR_GREEN_PIN,
+            COLOR_SENSOR_BLUE_PIN,
             COLOR_SENSOR_L_READER_PIN,
             colorThresholds
         ),
         ColorSensor(
             COLOR_SENSOR_RED_PIN,
             COLOR_SENSOR_GREEN_PIN,
+            COLOR_SENSOR_BLUE_PIN,
             COLOR_SENSOR_R_READER_PIN,
             colorThresholds
         ),
@@ -51,6 +58,7 @@ private:
     void adjustment();
     void newKingOfJudge();
     Colors judgeColor();
+    const char* colorsToChar(Linetracer::Colors color, char* colorChar);
 
     const int speed = SPEED;
     const int slowSpeed = SLOW_SPEED;

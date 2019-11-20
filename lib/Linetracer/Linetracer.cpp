@@ -20,10 +20,10 @@ Linetracer::Linetracer():
 }
 
 inline void Linetracer::adjustment(){
-    while (colorSensors[0].irradiateGreen())  // この時点で黒のラインを左のカラーセンサが読んでいたら、読まなくなるまで
+    while (colorSensors[0].read() != 'G')  // この時点で黒のラインを左のカラーセンサが読んでいたら、読まなくなるまで
         manager.write(-slowSpeed, 0);       // 左の車輪を後退
 
-    while (colorSensors[1].irradiateGreen())  // 同様に、この時点で黒のラインを右のカラーセンサが読んでいたら、読まなくなるまで
+    while (colorSensors[0].read() != 'G')  // 同様に、この時点で黒のラインを右のカラーセンサが読んでいたら、読まなくなるまで
         manager.write(0, -slowSpeed);       // 右の車輪を後退
 }
 
@@ -60,8 +60,8 @@ Linetracer::Colors Linetracer::judgeColor(){
     // adjustment();
     // newKingOfJudge();
     int result = 0;
-    if(colorSensors[0].irradiateRed()) result++;
-    if(colorSensors[1].irradiateRed()) result += 2;
+    if(colorSensors[0].read() == 'G') result++;
+    if(colorSensors[1].read() == 'G') result += 2;
     return (Linetracer::Colors)result;
 }
 
@@ -81,6 +81,16 @@ void Linetracer::left90(){
         manager.left(slowSpeed, true);
     while (!lineSensors[C].read())
         manager.left(slowSpeed, true);
+}
+
+const char* Linetracer::colorsToChar(Linetracer::Colors color, char* colorChar){
+    switch (color){
+        case WW: return "WW";
+        case GW: return "GW";
+        case WG: return "WG";
+        case GG: return "GG";
+        default: return "err";
+    }
 }
 
 bool Linetracer::run(){

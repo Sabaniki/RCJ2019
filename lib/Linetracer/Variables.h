@@ -14,6 +14,7 @@
 //----- カラーセンサ -----//
 #define COLOR_SENSOR_RED_PIN 14
 #define COLOR_SENSOR_GREEN_PIN 15
+#define COLOR_SENSOR_BLUE_PIN 15
 
 #define COLOR_SENSOR_L_READER_PIN A4
 #define COLOR_SENSOR_R_READER_PIN A8
@@ -34,6 +35,7 @@
 #define BACK_LENGH 10
 #define REN_LENGTH 10
 #define THRESHOLD_ROTARY_ENCODER 990
+#define IKKAITEN 19
 
 //----- 速度 -----//
 #define SPEED 100
