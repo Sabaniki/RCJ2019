@@ -15,12 +15,12 @@
 class Linetracer {
 private:
     Move manager;
-    KuromikaLine lineSensors[5] = {
-        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_1, LINE_SENSOR_THRESHOLD_1),
-        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_2, LINE_SENSOR_THRESHOLD_2),
-        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_3, LINE_SENSOR_THRESHOLD_3),
-        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_4, LINE_SENSOR_THRESHOLD_4),
-        KuromikaLine(LINE_GREEN_PIN, LINE_SENSOR_PIN_5, LINE_SENSOR_THRESHOLD_5),
+    PhotoReflector lineSensors[5] = {
+        PhotoReflector(LINE_SENSOR_PIN_1),
+        PhotoReflector(LINE_SENSOR_PIN_2),
+        PhotoReflector(LINE_SENSOR_PIN_3),
+        PhotoReflector(LINE_SENSOR_PIN_4),
+        PhotoReflector(LINE_SENSOR_PIN_5),
     };
     const int colorThresholds[3][3] = { 
         { 0, 4, 1 },    //G

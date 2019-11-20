@@ -21,14 +21,33 @@ void Move::straight(int speed){
 }
 
 // NOT USING ROTARYENCODER
-void Move::straight(int speed, int length){ 
-    motorL.write(speed);
-    motorR.write(speed);
-    delay(length);
-    // while(rotaryEncoder.until(length)){
-    //     motorL.write(speed);
-    //     motorR.write(speed);
-    // }
+void Move::straight(int speed, int distance){ 
+    int leftPower = 0, rightPower = 0;
+    const int L = 0, R = 1;
+    bool state[2] = {true, true};
+    while (state[L] || state[R]){
+        if (state[L])
+            state[L] = rotaryEncoderL.until(distance);
+        else if (state[R])
+            state[R] = rotaryEncoderR.until(distance);
+
+        if (state[L])
+            leftPower = speed;
+        else{
+            state[L] = false;
+            leftPower = 0;
+        }
+
+        if (state[R])
+            rightPower = speed;
+        else{
+            state[R] = false;
+            rightPower = 0;
+        }
+
+        write(leftPower, rightPower);
+    }
+    stop(false);
 }
 
 void Move::back(int speed){
