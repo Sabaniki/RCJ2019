@@ -44,12 +44,12 @@ void Linetracer::newKingOfJudge(){
     delay(5);
     if (whileBlackLine[LL]){
         leftPower = 0;
-        rightPower = speed;
+        rightPower = slowSpeed;
         if(!readLR[0]) rightPower *= -1;
         while (!lineSensors[L].read()) manager.write(leftPower, rightPower);
     }
     else{
-        leftPower = speed;
+        leftPower = slowSpeed;
         rightPower = 0;
         if(!readLR[1]) leftPower *= -1;
         while (!lineSensors[R].read()) manager.write(leftPower, rightPower);
@@ -59,8 +59,9 @@ void Linetracer::newKingOfJudge(){
 }
 
 Linetracer::Colors Linetracer::judgeColor(){
+    manager.stop();
     // adjustment();
-    newKingOfJudge();
+    //newKingOfJudge();
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
