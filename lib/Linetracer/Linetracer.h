@@ -23,9 +23,9 @@ private:
         PhotoReflector(LINE_SENSOR_PIN_5),
     };
     const int colorThresholds[3][3] = { 
-        { 0, 4, 1 },    //G
-        { 4, 12, 4 },   //W
-        { 0, 1, 0 },    //B
+        { 27, 65, 47 },  //G
+        { 80, 127, 92 },  //W
+        { 30, 58, 44 },  //B
     };
 
     // {0: 左, 1: 右}
@@ -59,7 +59,7 @@ private:
     char colorResult[5];
     void newKingOfJudge();
     Colors judgeColor();
-    const char* colorsToChar(Linetracer::Colors color);
+    const char* colorsToString(Linetracer::Colors color);
 
     int speed = SPEED;
     const int slowSpeed = SLOW_SPEED;

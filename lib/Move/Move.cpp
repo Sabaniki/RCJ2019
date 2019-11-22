@@ -63,6 +63,9 @@ void Move::back(int speed, int length){
     //     motorL.write(-speed);
     //     motorR.write(-speed);
     // }
+    motorL.write(-speed);
+    motorR.write(-speed);
+    delay(length);
 }
 
 void  Move::right(int speed, bool rotate){
@@ -90,11 +93,11 @@ void Move::stop(bool strong){
     if(strong){
         motorL.write(-255);
         motorR.write(-255);
-        delay(50);
+        delay(20);
     }
     else {
-        motorL.write(-255);
-        motorR.write(-255);
+        motorL.write(0);
+        motorR.write(0);
     }
 }
 

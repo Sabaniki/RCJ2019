@@ -49,9 +49,12 @@ void Linetracer::newKingOfJudge(){
 }
 
 Linetracer::Colors Linetracer::judgeColor(){
-    manager.stop();
+    manager.stop(true);
+    //manager.back(slowSpeed, backLength);
+    manager.stop(false);
+    delay(1);
     // adjustment();
-    //newKingOfJudge();
+    newKingOfJudge();
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
@@ -76,7 +79,7 @@ void Linetracer::left90(){
         manager.left(slowSpeed, true);
 }
 
-const char* Linetracer::colorsToChar(Linetracer::Colors color){
+const char* Linetracer::colorsToString(Linetracer::Colors color){
     switch (color){
         case WW: return "WW";
         case GW: return "GW";
@@ -108,17 +111,20 @@ bool Linetracer::run(){
         REN = 0;
         Linetracer::Colors colorResult = judgeColor();
         Serial.print("color: ");
-        Serial.println(colorsToChar(colorResult));
-        if(!colorResult){
-            blackSum = 0;
-            for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
-            if(blackSum >= 3) manager.straight(speed, straightLength);
-            else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
-                left90();
-            else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
-                right90();
-            else // 何か事故が起きてるので少し下がってみる
-                manager.back(speed, backLength);
+        Serial.println(colorsToString(colorResult));
+        if(colorResult == WW){
+            manager.stop(false);
+            manager.straight(slowSpeed, straightLength * 5);
+            //manager.straight(slowSpeed, straightLength * 5);
+            // blackSum = 0;
+            // for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
+            // if(blackSum >= 3) manager.straight(speed, straightLength);
+            // else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
+            //     left90();
+            // else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
+            //     right90();
+            // else // 何か事故が起きてるので少し下がってみる
+            //     manager.back(speed, backLength);
         }
         // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
         else if(colorResult == GW)
@@ -131,7 +137,7 @@ bool Linetracer::run(){
         }
         manager.stop(false);
     }
-    if(lineResult[LL]){
+    else if(lineResult[LL]){
         REN = 0;
         Serial.println("left 90");
         left90();
