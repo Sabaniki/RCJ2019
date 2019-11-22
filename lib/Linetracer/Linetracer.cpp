@@ -17,7 +17,8 @@ Linetracer::Linetracer():
         Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
         RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_ROTARY_ENCODER),
         RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_ROTARY_ENCODER)
-    ) {
+    ),
+    tiltSensor(TILT_SENSOR_READER_PIN, INPUT_PULLUP){
 }
 
 inline void Linetracer::adjustment(){
@@ -96,24 +97,30 @@ const char* Linetracer::colorsToChar(Linetracer::Colors color){
 
 bool Linetracer::run(){
     delay(1);
-    for (size_t i = 0; i < 5; i++)  lineResult[i] = lineSensors[i].read();
-    
+    for (size_t i = 0; i < 5; i++){
+        lineResult[i] = lineSensors[i].read();
+        blackSum += lineResult[i];
+    }
     for (size_t i = 0; i < 5; i++){
         Serial.print(lineResult[i]);
         Serial.print(", ");
     }
     Serial.println("");
+    speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
+    Serial.print("current speed: ");
+    Serial.println(speed);
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
-    if(lineResult[LL] ||  lineResult[RR]) {
-        Serial.println("LL | RR");
+    if(blackSum >= 3) {
+        Serial.print("blackSum: ");
+        Serial.println(blackSum);
         REN = 0;
         Linetracer::Colors colorResult = judgeColor();
         Serial.print("color: ");
         Serial.println(colorsToChar(colorResult));
         if(!colorResult){
-            int blackSum = 0;
+            blackSum = 0;
             for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
             if(blackSum >= 3) manager.straight(speed, straightLength);
             else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
@@ -162,5 +169,6 @@ bool Linetracer::run(){
     if(REN > THRESHOLD_REN)
         manager.straight(slowSpeed, RENlength);
     delay(1);
+    blackSum = 0;
     return true;
 }

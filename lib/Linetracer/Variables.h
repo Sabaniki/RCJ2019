@@ -34,6 +34,10 @@
 //----- 速度 -----//
 #define SPEED 100
 #define SLOW_SPEED 80
+#define SPEED_ACC 1.5
+
+//----- チルトセンサ -----//
+#define TILT_SENSOR_READER_PIN -1
 
 //----- その他 -----//
 #define THRESHOLD_REN 50
