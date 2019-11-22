@@ -22,11 +22,11 @@ Linetracer::Linetracer():
 }
 
 inline void Linetracer::adjustment(){
-    while (colorSensors[0].read() != 'G')  // この時点で黒のラインを左のカラーセンサが読んでいたら、読まなくなるまで
-        manager.write(-slowSpeed, 0);       // 左の車輪を後退
+    // while (colorSensors[0].read() != 'G')  // この時点で黒のラインを左のカラーセンサが読んでいたら、読まなくなるまで
+    //     manager.write(-slowSpeed, 0);       // 左の車輪を後退
 
-    while (colorSensors[0].read() != 'G')  // 同様に、この時点で黒のラインを右のカラーセンサが読んでいたら、読まなくなるまで
-        manager.write(0, -slowSpeed);       // 右の車輪を後退
+    // while (colorSensors[0].read() != 'G')  // 同様に、この時点で黒のラインを右のカラーセンサが読んでいたら、読まなくなるまで
+    //     manager.write(0, -slowSpeed);       // 右の車輪を後退
 }
 
 void Linetracer::newKingOfJudge(){
@@ -60,7 +60,7 @@ void Linetracer::newKingOfJudge(){
 
 Linetracer::Colors Linetracer::judgeColor(){
     // adjustment();
-    // newKingOfJudge();
+    newKingOfJudge();
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
@@ -96,7 +96,6 @@ const char* Linetracer::colorsToChar(Linetracer::Colors color){
 }
 
 bool Linetracer::run(){
-    delay(1);
     for (size_t i = 0; i < 5; i++){
         lineResult[i] = lineSensors[i].read();
         blackSum += lineResult[i];
@@ -111,7 +110,7 @@ bool Linetracer::run(){
     Serial.println(speed);
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
-    // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る
+    // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る←嘘。作らん。
     if(blackSum >= 3) {
         Serial.print("blackSum: ");
         Serial.println(blackSum);

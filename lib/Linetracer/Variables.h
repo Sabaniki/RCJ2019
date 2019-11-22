@@ -1,9 +1,9 @@
 //----- ラインセンサ -----//
-#define LINE_SENSOR_PIN_1 A3
-#define LINE_SENSOR_PIN_2 A5
-#define LINE_SENSOR_PIN_3 A1
-#define LINE_SENSOR_PIN_4 A7
-#define LINE_SENSOR_PIN_5 A9
+#define LINE_SENSOR_PIN_1 A7
+#define LINE_SENSOR_PIN_2 A6
+#define LINE_SENSOR_PIN_3 A5
+#define LINE_SENSOR_PIN_4 A4
+#define LINE_SENSOR_PIN_5 A3
 
 //----- カラーセンサ -----//
 #define COLOR_SENSOR_RED_PIN 14
@@ -24,8 +24,8 @@
 #define MOTOR_R_BACK_PIN 5
 
 //----- ロータリーエンコーダ -----//
-#define ROTARY_ENCODER_READER_PIN -1
-#define STRAIGHT_LENGH 30
+#define ROTARY_ENCODER_READER_PIN A0
+#define STRAIGHT_LENGH 150
 #define BACK_LENGH 10
 #define REN_LENGTH 10
 #define THRESHOLD_ROTARY_ENCODER 990
@@ -37,7 +37,7 @@
 #define SPEED_ACC 1.5
 
 //----- チルトセンサ -----//
-#define TILT_SENSOR_READER_PIN -1
+#define TILT_SENSOR_READER_PIN 29
 
 //----- その他 -----//
 #define THRESHOLD_REN 50

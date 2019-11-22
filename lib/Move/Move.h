@@ -7,7 +7,7 @@
 class Move {
 private:
     Motor motorL, motorR;
-    RotaryEncoder rotaryEncoderR, rotaryEncoderL;
+    RotaryEncoder rotaryEncoderL, rotaryEncoderR;
 
 public:
     Move(Motor motorL, Motor motorR, RotaryEncoder rotaryEncoderL, RotaryEncoder rotaryEncoderR);
