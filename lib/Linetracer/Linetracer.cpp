@@ -48,13 +48,75 @@ void Linetracer::newKingOfJudge(){
     delay(5);
 }
 
+void Linetracer::BNB_Judge(){
+    Serial.println("BNBNBNBNBNBNB");
+
+    if (lineResult[0]){
+        while (lineSensors[0].read() && lineSensors[1].read()){
+            manager.right(slowSpeed, true);
+
+            if ((lineSensors[3].read() && lineSensors[4].read()) || lineSensors[2].read()){
+                while (lineSensors[0].read() || lineSensors[4].read())
+                    manager.back(slowSpeed);
+
+                while (!lineSensors[0].read() || !lineSensors[0].read()){
+                    if (!lineSensors[0].read()){
+                        if (lineSensors[2].read())
+                            break;
+                        manager.right(slowSpeed, false);
+                    }
+                    else{
+                        if (lineSensors[2].read())
+                            break;
+                        manager.left(slowSpeed, false);
+                    }
+                }
+
+                manager.stop(false);
+                judgeColor();
+                return;
+            }
+        }
+        left90();
+    }
+
+    else if (lineResult[4]){
+        while (lineResult[4] && lineSensors[3].read()){
+            manager.left(slowSpeed, true);
+
+            if ((lineSensors[0].read() && lineSensors[1].read()) || lineSensors[4].read()){
+                while (lineSensors[0].read() || lineSensors[4].read())
+                    manager.back(slowSpeed);
+
+                while (!lineSensors[0].read() || !lineSensors[0].read()){
+                    if (!lineSensors[0].read()){
+                        if (lineSensors[2].read())
+                            break;
+                        manager.right(slowSpeed, false);
+                    }
+                    else{
+                        if (lineSensors[2].read())
+                            break;
+                        manager.left(slowSpeed, false);
+                    }
+                }
+                manager.stop(false);
+                judgeColor();
+                return;
+            }
+        }
+        right90();
+    }
+}
+
 Linetracer::Colors Linetracer::judgeColor(){
     manager.stop(true);
     //manager.back(slowSpeed, backLength);
     manager.stop(false);
     delay(1);
     // adjustment();
-    newKingOfJudge();
+    // newKingOfJudge();
+    BNB_Judge();
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
