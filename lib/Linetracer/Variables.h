@@ -30,7 +30,7 @@
 
 //----- 速度 -----//
 #define SPEED 100
-#define SLOW_SPEED 70
+#define SLOW_SPEED 60
 #define SPEED_ACC 1.5
 
 //----- チルトセンサ -----//
