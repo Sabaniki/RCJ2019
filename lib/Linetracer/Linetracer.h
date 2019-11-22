@@ -57,7 +57,6 @@ private:
 
     bool lineResult[5] = { false, false, false, false, false };
     char colorResult[5];
-    void adjustment();
     void newKingOfJudge();
     Colors judgeColor();
     const char* colorsToChar(Linetracer::Colors color);

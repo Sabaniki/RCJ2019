@@ -1,7 +1,5 @@
 #include "Linetracer.h"
 #include "Arduino.h"
-// #include "PhotoReflector.h"
-// #include "PhotoReflector.cpp"
 #include "Motor.h"
 #include "Motor.cpp"
 #include "Move.h"
@@ -19,14 +17,6 @@ Linetracer::Linetracer():
         RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_ROTARY_ENCODER)
     ),
     tiltSensor(TILT_SENSOR_READER_PIN, INPUT_PULLUP){
-}
-
-inline void Linetracer::adjustment(){
-    // while (colorSensors[0].read() != 'G')  // この時点で黒のラインを左のカラーセンサが読んでいたら、読まなくなるまで
-    //     manager.write(-slowSpeed, 0);       // 左の車輪を後退
-
-    // while (colorSensors[0].read() != 'G')  // 同様に、この時点で黒のラインを右のカラーセンサが読んでいたら、読まなくなるまで
-    //     manager.write(0, -slowSpeed);       // 右の車輪を後退
 }
 
 void Linetracer::newKingOfJudge(){
