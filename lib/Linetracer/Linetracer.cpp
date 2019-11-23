@@ -48,7 +48,7 @@ void Linetracer::newKingOfJudge(){
     delay(5);
 }
 
-void Linetracer::BNB_Judge(){
+Linetracer::Colors Linetracer::BNB_Judge(){
     Serial.println("BNBNBNBNBNBNB");
 
     if (lineResult[0]){
@@ -73,11 +73,11 @@ void Linetracer::BNB_Judge(){
                 }
 
                 manager.stop(false);
-                judgeColor();
-                return;
+                return judgeColor();
             }
         }
         left90();
+        return MV;
     }
 
     else if (lineResult[4]){
@@ -101,12 +101,13 @@ void Linetracer::BNB_Judge(){
                     }
                 }
                 manager.stop(false);
-                judgeColor();
-                return;
+                return judgeColor();
             }
         }
         right90();
+        return MV;
     }
+    return MV;
 }
 
 Linetracer::Colors Linetracer::judgeColor(){
@@ -114,9 +115,6 @@ Linetracer::Colors Linetracer::judgeColor(){
     //manager.back(slowSpeed, backLength);
     manager.stop(false);
     delay(1);
-    // adjustment();
-    // newKingOfJudge();
-    BNB_Judge();
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
@@ -168,31 +166,22 @@ bool Linetracer::run(){
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る←嘘。作らん。
     if(blackSum >= 3) {
+        //kingOfJudge();
         Serial.print("blackSum: ");
         Serial.println(blackSum);
         REN = 0;
-        Linetracer::Colors colorResult = judgeColor();
+        manager.back(slowSpeed, backLength);
+        Linetracer::Colors colorResult = BNB_Judge();
         Serial.print("color: ");
         Serial.println(colorsToString(colorResult));
+        while (manager.stop(false), true);
+        
         if(colorResult == WW){
             manager.stop(false);
             manager.straight(slowSpeed, straightLength * 5);
-            //manager.straight(slowSpeed, straightLength * 5);
-            // blackSum = 0;
-            // for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
-            // if(blackSum >= 3) manager.straight(speed, straightLength);
-            // else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
-            //     left90();
-            // else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
-            //     right90();
-            // else // 何か事故が起きてるので少し下がってみる
-            //     manager.back(speed, backLength);
         }
-        // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
-        else if(colorResult == GW)
-            left90();
-        else if(colorResult == WG)
-            right90();
+        else if(colorResult == GW) left90();
+        else if(colorResult == WG) right90();
         else if(colorResult == GG){
             right90();
             right90();
