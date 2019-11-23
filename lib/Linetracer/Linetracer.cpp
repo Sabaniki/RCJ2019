@@ -48,35 +48,115 @@ void Linetracer::newKingOfJudge(){
     delay(5);
 }
 
-bool Linetracer::finalJudge(){
-    Serial.println("finalJudge");
+void Linetracer::finalJudge(unsigned int untilTime){
+    int time = 0;
     if(lineResult[LL]){
-        while(lineSensors[LL].read()){
-            manager.right(speed, false);
-            if(lineSensors[C].read())return true;
-    }
-        while(!lineSensors[LL].read()){
-            manager.right(-speed, false);
-            if(lineSensors[C].read())return true;
+        time = millis();
+        //まっすぐ
+        while(millis() - time < straightLength){
+            Serial.println("straight");
+            manager.straight(speed);
+            if(lineSensors[RR].read()){
+                colorResult =  judgeColor(millis()-time);
+                return;
+            }
+        }
+        manager.stop(false);
+        //まわす
+        if(lineSensors[RR].read()){
+            while (manager.left(slowSpeed, false), !lineSensors[LL].read());
+            colorResult = judgeColor(straightLength);
+            return;
+        }
+        //センシングその１
+        else {
+            time = millis();
+            while(millis() - time < untilTime){
+                Serial.println("adjust");
+                manager.left(-speed,true);
+                if(lineSensors[C].read()){
+                    manager.stop(false);
+                    colorResult = judgeColor(straightLength);
+                    return;
+                }
+            }
+            //センシングその２
+            time = millis();
+            while (millis() - time < untilTime * 2){
+                Serial.println("adjust");
+                manager.left(speed,true);
+                if(lineSensors[C].read()){
+                    manager.stop(false);
+                    colorResult = judgeColor(straightLength);
+                    return;
+                }
+            }
+            left90();
+            Serial.println("final: left90 was done");
+            colorResult = MV;
+            return;
         }
     }
+    
     else if(lineResult[RR]){
-        while(lineSensors[RR].read()){
-            manager.left(speed, false);
-            if(lineSensors[C].read())return true;
+        //まっすぐ
+        while(millis() - time < straightLength){
+            Serial.println("straight");
+            manager.straight(speed);
+            if(lineSensors[LL].read()){
+                colorResult =  judgeColor(millis()-time);
+                return;
+            }
         }
-            
-        while(!lineSensors[RR].read()){
-            manager.left(-speed, false);
-            if(lineSensors[C].read())return true;
-        }  
-    }else if(lineResult[C]) return true;
-    manager.stop(false);
-    return false;
+        manager.stop(false);
+        //回す
+        if(lineSensors[LL].read()){
+            while (manager.right(slowSpeed, false), !lineSensors[RR].read());
+            colorResult = judgeColor(straightLength);
+            return;
+        }
+        else {
+            //センシングその１
+            time = millis();
+            while (millis() - time < untilTime){
+                Serial.println("adjust");
+                manager.right(-speed,true);
+                if(lineSensors[C].read()){
+                    manager.stop(false);
+                    colorResult = judgeColor(straightLength);
+                    return;
+                }
+            }
+            //センシングその２
+            time = millis();
+            while (millis() - time < untilTime * 2){
+                Serial.println("adjust");
+                manager.right(speed,true);
+                if(lineSensors[C].read()){
+                    manager.stop(false);
+                    colorResult = judgeColor(straightLength);
+                    return;
+                }
+            }
+            right90();
+            Serial.println("final: righte90 was done");
+            colorResult = MV;
+            return;
+        }
+    }
 }
 
-Linetracer::Colors Linetracer::judgeColor(){
-    manager.back(slowSpeed, backLength * 3.5);
+void Linetracer::crossJunction(){
+
+}
+
+void Linetracer::T_Junction(){
+
+}
+
+Linetracer::Colors Linetracer::judgeColor(int time){
+    Serial.println("judge color");
+    manager.back(slowSpeed, backLength * 0.3 + time);
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
@@ -86,7 +166,7 @@ Linetracer::Colors Linetracer::judgeColor(){
 
 void Linetracer::right90(){
     manager.stop(false);
-    manager.straight(slowSpeed, STRAIGHT_LENGH);
+    manager.straight(slowSpeed, STRAIGHT_LENGH * 0.5);
     while (lineSensors[C].read())
         manager.right(slowSpeed, true);
     while (!lineSensors[C].read())
@@ -95,7 +175,7 @@ void Linetracer::right90(){
 
 void Linetracer::left90(){
     manager.stop(false);
-    manager.straight(slowSpeed, STRAIGHT_LENGH);
+    manager.straight(slowSpeed, STRAIGHT_LENGH * 0.5);
     while (lineSensors[C].read())
         manager.left(slowSpeed, true);
     while (!lineSensors[C].read())
@@ -125,99 +205,30 @@ bool Linetracer::run(){
     //speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
     Serial.print("current speed: ");
     Serial.println(speed);
-    // colorResult = judgeColor();
-    // Serial.println(colorsToString(colorResult));
+    colorResult = MV;
 
-    // if(colorResult == GW)
-    //     left90();
-    // else if(colorResult == WG)
-    //     right90();
-    // else if(colorResult == GG){
-    //     right90();
-    //     right90();
-    // }
+    finalJudge(1000);
+    Serial.println(colorsToString(colorResult));
+    if(colorResult == GW){
+        manager.left(speed,100);
+        left90();
+    }
+    else if(colorResult == WG){
+        manager.right(speed,100);
+        right90();
+    }
+    else if(colorResult == GG){
+        manager.right(speed,100);
+        right90();
+        right90();
+    }
+    else if(colorResult == WW){
+        manager.straight(speed,straightLength);
+    }
+    
+    
 
-    // これだと大分条件がゆるいし比例もどきすらもできないので、
-    // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る←嘘。作らん。
-    if(lineResult[L] || lineResult[R]) {
-        manager.straight(slowSpeed, straightLength * 1.5);
-        Serial.print("blackSum: ");
-        Serial.println(blackSum);
-        REN = 0;
-        if(lineResult[LL]){
-            while (lineSensors[LL].read()){
-                manager.straight(slowSpeed);
-                if(lineSensors[RR].read()){
-                    Linetracer::Colors colorResult = judgeColor();
-                    if(colorResult == GW)
-                        left90();
-                    else if(colorResult == WG)
-                        right90();
-                    else if(colorResult == GG){
-                        right90();
-                        right90();
-                    }
-                }
-            }
-        }
-        if(lineResult[RR]){
-            while (lineSensors[RR].read()){
-                manager.straight(slowSpeed);
-                if(lineSensors[LL].read()){
-                    Linetracer::Colors colorResult = judgeColor();
-                    if(colorResult == GW)
-                        left90();
-                    else if(colorResult == WG)
-                        right90();
-                    else if(colorResult == GG){
-                        right90();
-                        right90();
-                    }
-                }
-            }
-        }
-        Serial.print("color: ");
-        Serial.println(colorsToString(colorResult));
-        if(colorResult == WW){
-            manager.stop(false);
-            manager.straight(slowSpeed, straightLength * 5);
-            //manager.straight(slowSpeed, straightLength * 5);
-            // blackSum = 0;
-            // for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
-            // if(blackSum >= 3) manager.straight(speed, straightLength);
-            // else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
-            //     left90();
-            // else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
-            //     right90();
-            // else // 何か事故が起きてるので少し下がってみる
-            //     manager.back(speed, backLength);
-        }
-        // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
-        // else if(colorResult == GW)
-        //     left90();
-        // else if(colorResult == WG)
-        //     right90();
-        // else if(colorResult == GG){
-        //     right90();
-        //     right90();
-        // }
-        manager.stop(false);
-    }
-    else if(lineResult[LL]){
-        REN = 0;
-        if(!finalJudge()){
-            Serial.println("left 90");
-            left90();
-        }
-    }
-    else if(lineResult[RR]){
-        REN = 0;
-        if(!finalJudge()){
-            Serial.println("right 90");
-            right90();
-        }
-    }
-    else if(lineResult[L]){
+    if(lineResult[L]){
         Serial.println("L");
         REN++;
         manager.left(speed, true);
@@ -234,6 +245,7 @@ bool Linetracer::run(){
     }
     if(REN > THRESHOLD_REN)
         manager.straight(slowSpeed, RENlength);
+
     //delay(1);
     blackSum = 0;
     return true;

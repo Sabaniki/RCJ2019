@@ -22,8 +22,8 @@
 
 //----- ロータリーエンコーダ -----//
 #define ROTARY_ENCODER_READER_PIN A1
-#define STRAIGHT_LENGH 300
-#define BACK_LENGH 300
+#define STRAIGHT_LENGH 200
+#define BACK_LENGH 200
 #define REN_LENGTH 200
 #define THRESHOLD_ROTARY_ENCODER 900
 #define IKKAITEN 19
