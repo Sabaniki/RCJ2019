@@ -77,7 +77,7 @@ private:
     int REN = 0;
     const int RENlength = REN_LENGTH;
     int blackSum = 0;
-    Linetracer::Colors colorResult;
+    Linetracer::Colors colorResult = WW;
 
 public:
     Linetracer();

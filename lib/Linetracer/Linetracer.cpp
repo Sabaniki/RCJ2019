@@ -122,7 +122,7 @@ bool Linetracer::run(){
         Serial.print(", ");
     }
     Serial.println("");
-    speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
+    //speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
     Serial.print("current speed: ");
     Serial.println(speed);
     // colorResult = judgeColor();
@@ -139,7 +139,7 @@ bool Linetracer::run(){
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る←嘘。作らん。
-    if(lineResult[LL] || lineResult[RR]) {
+    if(lineResult[L] || lineResult[R]) {
         manager.straight(slowSpeed, straightLength * 1.5);
         Serial.print("blackSum: ");
         Serial.println(blackSum);
