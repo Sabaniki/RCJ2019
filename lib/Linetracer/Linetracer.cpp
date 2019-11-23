@@ -49,11 +49,12 @@ void Linetracer::newKingOfJudge(){
 }
 
 void Linetracer::finalJudge(unsigned int untilTime){
+    double multipy = 2;
     int time = 0;
     if(lineResult[LL]){
         time = millis();
         //まっすぐ
-        while(millis() - time < straightLength){
+        while(millis() - time < straightLength*multipy){
             Serial.println("straight");
             manager.straight(speed);
             if(lineSensors[RR].read()){
@@ -65,7 +66,7 @@ void Linetracer::finalJudge(unsigned int untilTime){
         //まわす
         if(lineSensors[RR].read()){
             while (manager.left(slowSpeed, false), !lineSensors[LL].read());
-            colorResult = judgeColor(straightLength);
+            colorResult = judgeColor(straightLength * multipy);
             return;
         }
         //センシングその１
@@ -76,7 +77,7 @@ void Linetracer::finalJudge(unsigned int untilTime){
                 manager.left(-speed,true);
                 if(lineSensors[C].read()){
                     manager.stop(false);
-                    colorResult = judgeColor(straightLength);
+                    colorResult = judgeColor(straightLength * multipy);
                     return;
                 }
             }
@@ -87,7 +88,7 @@ void Linetracer::finalJudge(unsigned int untilTime){
                 manager.left(speed,true);
                 if(lineSensors[C].read()){
                     manager.stop(false);
-                    colorResult = judgeColor(straightLength);
+                    colorResult = judgeColor(straightLength * multipy);
                     return;
                 }
             }
@@ -100,7 +101,7 @@ void Linetracer::finalJudge(unsigned int untilTime){
     
     else if(lineResult[RR]){
         //まっすぐ
-        while(millis() - time < straightLength){
+        while(millis() - time < straightLength * multipy){
             Serial.println("straight");
             manager.straight(speed);
             if(lineSensors[LL].read()){
@@ -112,7 +113,7 @@ void Linetracer::finalJudge(unsigned int untilTime){
         //回す
         if(lineSensors[LL].read()){
             while (manager.right(slowSpeed, false), !lineSensors[RR].read());
-            colorResult = judgeColor(straightLength);
+            colorResult = judgeColor(straightLength * multipy);
             return;
         }
         else {
@@ -123,7 +124,7 @@ void Linetracer::finalJudge(unsigned int untilTime){
                 manager.right(-speed,true);
                 if(lineSensors[C].read()){
                     manager.stop(false);
-                    colorResult = judgeColor(straightLength);
+                    colorResult = judgeColor(straightLength * multipy);
                     return;
                 }
             }
@@ -134,7 +135,7 @@ void Linetracer::finalJudge(unsigned int untilTime){
                 manager.right(speed,true);
                 if(lineSensors[C].read()){
                     manager.stop(false);
-                    colorResult = judgeColor(straightLength);
+                    colorResult = judgeColor(straightLength * multipy);
                     return;
                 }
             }
@@ -156,11 +157,11 @@ void Linetracer::T_Junction(){
 
 Linetracer::Colors Linetracer::judgeColor(int time){
     Serial.println("judge color");
-    manager.back(slowSpeed, backLength * 0.3 + time);
+    manager.back(slowSpeed, backLength * 1.5 + time);
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
-    manager.straight(slowSpeed, straightLength * 3.5);
+    //manager.straight(slowSpeed, straightLength * 3.5);
     return (Linetracer::Colors)result;
 }
 
@@ -193,6 +194,7 @@ const char* Linetracer::colorsToString(Linetracer::Colors color){
 }
 
 bool Linetracer::run(){
+    int GGcount = 0;
     for (size_t i = 0; i < 5; i++){
         lineResult[i] = lineSensors[i].read();
         blackSum += lineResult[i];
@@ -210,17 +212,25 @@ bool Linetracer::run(){
     finalJudge(1000);
     Serial.println(colorsToString(colorResult));
     if(colorResult == GW){
-        manager.left(speed,100);
+        manager.left(speed,200);
         left90();
     }
     else if(colorResult == WG){
-        manager.right(speed,100);
+        manager.right(speed,200);
         right90();
     }
     else if(colorResult == GG){
-        manager.right(speed,100);
-        right90();
-        right90();
+        while(true){
+            manager.stop(false);
+        }
+        if(GGcount == 0){
+            manager.right(speed,100);
+            right90();
+            right90();
+        }else{
+            GGcount++;
+            manager.back(speed,backLength*8);
+        }
     }
     else if(colorResult == WW){
         manager.straight(speed,straightLength);
