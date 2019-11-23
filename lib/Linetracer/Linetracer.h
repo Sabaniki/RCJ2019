@@ -68,7 +68,7 @@ private:
     Colors BNB_Judge();
     Colors judgeColor();
     const char* colorsToString(Linetracer::Colors color);
-    void finalJudge();
+    bool finalJudge(int untilTime);
 
     int speed = SPEED;
     const int slowSpeed = SLOW_SPEED;
@@ -77,6 +77,7 @@ private:
     int REN = 0;
     const int RENlength = REN_LENGTH;
     int blackSum = 0;
+    int time = 0;
 
 public:
     Linetracer();

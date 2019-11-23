@@ -25,7 +25,7 @@
 #define STRAIGHT_LENGH 150
 #define BACK_LENGH 150
 #define REN_LENGTH 10
-#define THRESHOLD_ROTARY_ENCODER 990
+#define THRESHOLD_ROTARY_ENCODER 900
 #define IKKAITEN 19
 
 //----- 速度 -----//

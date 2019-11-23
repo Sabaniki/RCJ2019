@@ -93,7 +93,7 @@ void Move::stop(bool strong){
     if(strong){
         motorL.write(-255);
         motorR.write(-255);
-        delay(20);
+        delay(10);
     }
     else {
         motorL.write(0);

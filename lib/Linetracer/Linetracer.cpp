@@ -58,8 +58,39 @@ Linetracer::Colors Linetracer::BNB_Judge(){
     return judgeColor();
 }
 
-void Linetracer::finalJudge(){
+bool Linetracer::finalJudge(int untilTime){
+    int time = millis();
+    while(untilTime > (millis() - time)){
+        if(lineResult[LL]){
+            manager.right(slowSpeed * 0.8, false);
+            if(lineSensors[RR].read()){
+                return true;
+            }
+        }
+        else if(lineResult[RR]){
+            manager.left(slowSpeed * 0.8, false);
+            if(lineSensors[LL].read()){
+                return true;
+            }
+        }
+    }
 
+    while(untilTime > (millis() - time)){
+        if(lineResult[LL]){
+            manager.right(-slowSpeed * 0.8, false);
+            if(lineSensors[RR].read()){
+                return true;
+            }
+        }
+        else if(lineResult[RR]){
+            manager.left(-slowSpeed * 0.8, false);
+            if(lineSensors[LL].read()){
+                return true;
+            }
+        }
+    }
+    return false;
+    
 }
 
 Linetracer::Colors Linetracer::judgeColor(){
@@ -119,7 +150,7 @@ bool Linetracer::run(){
     speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
     Serial.print("current speed: ");
     Serial.println(speed);
-
+    TLINE:
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る←嘘。作らん。
     if(blackSum >= 3) {
@@ -147,12 +178,14 @@ bool Linetracer::run(){
     else if(lineResult[LL]){
         REN = 0;
         Serial.println("left 90");
-        left90();
+        if(!finalJudge(1000))left90();
+        else goto TLINE;
     }
     else if(lineResult[RR]){
         REN = 0;
         Serial.println("right 90");
-        right90();
+        if(!finalJudge(1000))right90();
+        else goto TLINE;
     }
     if(lineResult[L]){
         Serial.println("L");
