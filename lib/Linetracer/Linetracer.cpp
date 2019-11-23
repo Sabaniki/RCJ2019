@@ -161,7 +161,7 @@ Linetracer::Colors Linetracer::judgeColor(int time){
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
-    //manager.straight(slowSpeed, straightLength * 3.5);
+    manager.straight(slowSpeed, straightLength * 3.5);
     return (Linetracer::Colors)result;
 }
 

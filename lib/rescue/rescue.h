@@ -12,7 +12,7 @@
 #include "UltrasonicSensor.h"
 #include "UltrasonicSensor.cpp"
 #include "Servo.h"
-#include "RescueVariables.h"
+#include "rescueVariables.h"
 #include "Variables.h"
 
 class Rescue{
