@@ -16,7 +16,7 @@ Linetracer::Linetracer():
         RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_ROTARY_ENCODER),
         RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_ROTARY_ENCODER)
     ),
-    tiltSensor(TILT_SENSOR_READER_PIN, INPUT_PULLUP){
+    tiltSensor(TILT_SENSOR_READER_PIN, INPUT){
 }
 
 void Linetracer::newKingOfJudge(){
@@ -155,9 +155,37 @@ void Linetracer::T_Junction(){
 
 }
 
+void Linetracer::avoid(){
+    if(switches[0].read()){
+        manager.back(slowSpeed, AVOID_BACK);
+        manager.right(slowSpeed, true);
+        delay(AVOID_ROTATE / 2);
+        manager.straight(slowSpeed, AVOID_DISTANCE);
+        manager.left(slowSpeed, true);
+        delay(AVOID_ROTATE);
+        while(manager.straight(slowSpeed), lineSensors[C].read());
+        manager.straight(slowSpeed, straightLength * 3.5);
+        manager.right(slowSpeed, true);
+        delay(AVOID_ROTATE / 2);
+    }
+
+    else if(switches[1].read()){
+        manager.back(slowSpeed, AVOID_BACK);
+        manager.left(slowSpeed, true);
+        delay(AVOID_ROTATE / 2);
+        manager.straight(slowSpeed, AVOID_DISTANCE);
+        manager.right(slowSpeed, true);
+        delay(AVOID_ROTATE);
+        while(manager.straight(slowSpeed), lineSensors[C].read());
+        manager.straight(slowSpeed, straightLength * 3.5);
+        manager.left(slowSpeed, true);
+        delay(AVOID_ROTATE / 2);
+    }
+}
+
 Linetracer::Colors Linetracer::judgeColor(int time){
     Serial.println("judge color");
-    manager.back(slowSpeed, backLength * 1.5 + time);
+    manager.back(slowSpeed, backLength * 0.8 + time);
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
@@ -204,19 +232,26 @@ bool Linetracer::run(){
         Serial.print(", ");
     }
     Serial.println("");
-    //speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
+    speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
     Serial.print("current speed: ");
     Serial.println(speed);
     colorResult = MV;
 
-    finalJudge(1000);
+    avoid();
+    if(!(blackSum == 5)){
+        //manager.straight(speed*1.5,straightLength * 2);
+        //manager.back(speed*1.5,straightLength * 2);
+        finalJudge(1000);
+    }else{
+        Serial.println("All Blacks");
+    }
     Serial.println(colorsToString(colorResult));
     if(colorResult == GW){
-        manager.left(speed,200);
+        manager.left(speed,500);
         left90();
     }
     else if(colorResult == WG){
-        manager.right(speed,200);
+        manager.right(speed,500);
         right90();
     }
     else if(colorResult == GG){
@@ -227,7 +262,8 @@ bool Linetracer::run(){
             manager.right(speed,100);
             right90();
             right90();
-        }else{
+        }
+        else{
             GGcount++;
             manager.back(speed,backLength*8);
         }
@@ -235,8 +271,6 @@ bool Linetracer::run(){
     else if(colorResult == WW){
         manager.straight(speed,straightLength);
     }
-    
-    
 
     if(lineResult[L]){
         Serial.println("L");

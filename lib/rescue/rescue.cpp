@@ -13,9 +13,9 @@
 #include "UltrasonicSensor.cpp"
 
 Rescue::Rescue() : manager(
-                       Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
-                       Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
-                       RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_RRTE))
+                        Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
+                        Motor(MOTOR_R_FRONT_PIN, MOTOR_R_BACK_PIN),
+                        RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_RRTE))
 {
     front.attach(SRV_PIN_1);
     back.attach(SRV_PIN_2);

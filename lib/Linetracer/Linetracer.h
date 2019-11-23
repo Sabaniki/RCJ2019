@@ -58,7 +58,7 @@ private:
         LL, L, C, R, RR
 	};
     enum Colors{
-        WW, GW, WG, GG, MV
+        WW, GW, WG, GG,　MV
     };
 
     bool lineResult[5] = { false, false, false, false, false };
@@ -71,6 +71,7 @@ private:
     void finalJudge(unsigned int untilTime);
     void T_Junction();
     void crossJunction();
+    void avoid();
 
 
     int speed = SPEED;
@@ -81,6 +82,10 @@ private:
     const int RENlength = REN_LENGTH;
     int blackSum = 0;
     Linetracer::Colors colorResult = MV;
+    DigitalPin switches[2] = {
+        DigitalPin(SWITCH_PIN_L, INPUT_PULLUP),
+        DigitalPin(SWITCH_PIN_R, INPUT_PULLUP),
+    };
 
 public:
     Linetracer();

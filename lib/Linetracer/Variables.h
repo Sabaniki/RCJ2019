@@ -29,12 +29,21 @@
 #define IKKAITEN 19
 
 //----- 速度 -----//
-#define SPEED 70
-#define SLOW_SPEED 50
-#define SPEED_ACC 2.2
+#define SPEED 100  //70
+#define SLOW_SPEED 70 //50
+#define SPEED_ACC 2.5
 
 //----- チルトセンサ -----//
 #define TILT_SENSOR_READER_PIN 29
+
+//----- スイッチ -----//
+#define SWITCH_PIN_L 44
+#define SWITCH_PIN_R 46
+
+//----- スイッチ -----//
+#define AVOID_BACK 1500
+#define AVOID_ROTATE 2200
+#define AVOID_DISTANCE 3500
 
 //----- その他 -----//
 #define THRESHOLD_REN 50
