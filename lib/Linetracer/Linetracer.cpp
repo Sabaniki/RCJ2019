@@ -187,28 +187,52 @@ Linetracer::Colors Linetracer::judgeColor(int time){
     Serial.println("judge color");
     manager.back(slowSpeed, backLength * 0.8 + time);
     int result = 0;
-    if(colorSensors[0].read() == 'G') result++;
-    if(colorSensors[1].read() == 'G') result += 2;
+    char colors[2] = {
+        colorSensors[0].read(),
+        colorSensors[1].read()
+    };
+    if(colors[0] == 'G') result++;
+    if(colors[1] == 'G') result += 2;
+    //bがあったらBNPを返す
+    if(colors[0] == 'B' || colors[1] == 'B')result = BNP;
     manager.straight(slowSpeed, straightLength * 3.5);
     return (Linetracer::Colors)result;
 }
 
 void Linetracer::right90(){
+    int time;
     manager.stop(false);
     manager.straight(slowSpeed, STRAIGHT_LENGH * 0.5);
-    while (lineSensors[C].read())
+    time = millis();
+    while (lineSensors[C].read()){
         manager.right(slowSpeed, true);
-    while (!lineSensors[C].read())
+        if((millis() - time) > 10000) break;
+        //10秒立ったらやめる
+    }
+    time = millis();
+    while (!lineSensors[C].read()){
         manager.right(slowSpeed, true);
+        if((millis() - time) > 10000) break;
+        //10秒立ったらやめる
+    }
 }
 
 void Linetracer::left90(){
+    int time;
     manager.stop(false);
     manager.straight(slowSpeed, STRAIGHT_LENGH * 0.5);
-    while (lineSensors[C].read())
+    time = millis();
+    while (lineSensors[C].read()){
         manager.left(slowSpeed, true);
-    while (!lineSensors[C].read())
+        if((millis() - time) > 10000) break;
+        //10秒立ったらやめる
+    }
+    time = millis();
+    while (!lineSensors[C].read()){
         manager.left(slowSpeed, true);
+        if((millis() - time) > 10000) break;
+        //10秒立ったらやめる
+    }
 }
 
 const char* Linetracer::colorsToString(Linetracer::Colors color){
@@ -223,6 +247,7 @@ const char* Linetracer::colorsToString(Linetracer::Colors color){
 
 bool Linetracer::run(){
     int GGcount = 0;
+    int BNPcount = 0;
     for (size_t i = 0; i < 5; i++){
         lineResult[i] = lineSensors[i].read();
         blackSum += lineResult[i];
@@ -258,18 +283,25 @@ bool Linetracer::run(){
         while(true){
             manager.stop(false);
         }
-        if(GGcount == 0){
+        if(GGcount  >= 3){
+            GGcount = 0;
             manager.right(speed,100);
             right90();
             right90();
         }
         else{
             GGcount++;
-            manager.back(speed,backLength*8);
+            manager.back(speed,backLength*3);
         }
     }
     else if(colorResult == WW){
         manager.straight(speed,straightLength);
+    }else if(colorResult == BNP){
+        BNPcount++;
+        manager.back(speed,backLength*3);
+    }else if(BNPcount >= 3){
+        BNPcount = 0;
+        manager.straight(speed * 1.5 , straightLength);
     }
 
     if(lineResult[L]){

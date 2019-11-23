@@ -58,7 +58,7 @@ private:
         LL, L, C, R, RR
 	};
     enum Colors{
-        WW, GW, WG, GG,　MV
+        WW, GW, WG, GG, MV, BNP
     };
 
     bool lineResult[5] = { false, false, false, false, false };
