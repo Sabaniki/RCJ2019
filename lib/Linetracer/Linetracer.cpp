@@ -110,37 +110,38 @@ bool Linetracer::run(){
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る←嘘。作らん。
-    if(blackSum >= 3) {
-        Serial.print("blackSum: ");
-        Serial.println(blackSum);
-        REN = 0;
-        Linetracer::Colors colorResult = judgeColor();
-        Serial.print("color: ");
-        Serial.println(colorsToString(colorResult));
-        if(colorResult == WW){
-            manager.stop(false);
-            manager.straight(slowSpeed, straightLength * 5);
-            //manager.straight(slowSpeed, straightLength * 5);
-            // blackSum = 0;
-            // for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
-            // if(blackSum >= 3) manager.straight(speed, straightLength);
-            // else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
-            //     left90();
-            // else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
-            //     right90();
-            // else // 何か事故が起きてるので少し下がってみる
-            //     manager.back(speed, backLength);
-        }
-        // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
-        else if(colorResult == GW)
-            left90();
-        else if(colorResult == WG)
-            right90();
-        else if(colorResult == GG){
-            right90();
-            right90();
-        }
-        manager.stop(false);
+    else if(blackSum >= 3) {
+        manager.straight(slowSpeed, straightLength * 1.5);
+        // Serial.print("blackSum: ");
+        // Serial.println(blackSum);
+        // REN = 0;
+        // Linetracer::Colors colorResult = judgeColor();
+        // Serial.print("color: ");
+        // Serial.println(colorsToString(colorResult));
+        // if(colorResult == WW){
+        //     manager.stop(false);
+        //     manager.straight(slowSpeed, straightLength * 5);
+        //     //manager.straight(slowSpeed, straightLength * 5);
+        //     // blackSum = 0;
+        //     // for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
+        //     // if(blackSum >= 3) manager.straight(speed, straightLength);
+        //     // else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
+        //     //     left90();
+        //     // else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
+        //     //     right90();
+        //     // else // 何か事故が起きてるので少し下がってみる
+        //     //     manager.back(speed, backLength);
+        // }
+        // // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
+        // else if(colorResult == GW)
+        //     left90();
+        // else if(colorResult == WG)
+        //     right90();
+        // else if(colorResult == GG){
+        //     right90();
+        //     right90();
+        // }
+        // manager.stop(false);
     }
     else if(lineResult[LL]){
         REN = 0;

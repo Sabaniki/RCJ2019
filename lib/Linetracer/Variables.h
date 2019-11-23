@@ -29,8 +29,8 @@
 #define IKKAITEN 19
 
 //----- 速度 -----//
-#define SPEED 80
-#define SLOW_SPEED 60
+#define SPEED 100
+#define SLOW_SPEED 80
 #define SPEED_ACC 2.2
 
 //----- チルトセンサ -----//
