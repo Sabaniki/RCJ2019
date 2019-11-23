@@ -22,15 +22,15 @@
 
 //----- ロータリーエンコーダ -----//
 #define ROTARY_ENCODER_READER_PIN A1
-#define STRAIGHT_LENGH 150
-#define BACK_LENGH 150
-#define REN_LENGTH 10
+#define STRAIGHT_LENGH 300
+#define BACK_LENGH 300
+#define REN_LENGTH 200
 #define THRESHOLD_ROTARY_ENCODER 900
 #define IKKAITEN 19
 
 //----- 速度 -----//
-#define SPEED 100
-#define SLOW_SPEED 80
+#define SPEED 70
+#define SLOW_SPEED 50
 #define SPEED_ACC 2.2
 
 //----- チルトセンサ -----//

@@ -48,10 +48,39 @@ void Linetracer::newKingOfJudge(){
     delay(5);
 }
 
+bool Linetracer::finalJudge(){
+    Serial.println("finalJudge");
+    if(lineResult[LL]){
+        while(lineSensors[LL].read()){
+            manager.right(speed, false);
+            if(lineSensors[C].read())return true;
+    }
+        while(!lineSensors[LL].read()){
+            manager.right(-speed, false);
+            if(lineSensors[C].read())return true;
+        }
+    }
+    else if(lineResult[RR]){
+        while(lineSensors[RR].read()){
+            manager.left(speed, false);
+            if(lineSensors[C].read())return true;
+        }
+            
+        while(!lineSensors[RR].read()){
+            manager.left(-speed, false);
+            if(lineSensors[C].read())return true;
+        }  
+    }else if(lineResult[C]) return true;
+    manager.stop(false);
+    return false;
+}
+
 Linetracer::Colors Linetracer::judgeColor(){
+    manager.back(slowSpeed, backLength * 3.5);
     int result = 0;
     if(colorSensors[0].read() == 'G') result++;
     if(colorSensors[1].read() == 'G') result += 2;
+    manager.straight(slowSpeed, straightLength * 3.5);
     return (Linetracer::Colors)result;
 }
 
@@ -96,43 +125,74 @@ bool Linetracer::run(){
     speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
     Serial.print("current speed: ");
     Serial.println(speed);
-    colorResult = judgeColor();
-    Serial.println(colorsToString(colorResult));
+    // colorResult = judgeColor();
+    // Serial.println(colorsToString(colorResult));
 
-    if(colorResult == GW)
-        left90();
-    else if(colorResult == WG)
-        right90();
-    else if(colorResult == GG){
-        right90();
-        right90();
-    }
+    // if(colorResult == GW)
+    //     left90();
+    // else if(colorResult == WG)
+    //     right90();
+    // else if(colorResult == GG){
+    //     right90();
+    //     right90();
+    // }
 
     // これだと大分条件がゆるいし比例もどきすらもできないので、
     // あとで((lineResult[L] && lineResult[L]) || (lineResult[R] && lineResult[RR]))のブランチも作る←嘘。作らん。
-    else if(blackSum >= 3) {
+    if(lineResult[LL] || lineResult[RR]) {
         manager.straight(slowSpeed, straightLength * 1.5);
-        // Serial.print("blackSum: ");
-        // Serial.println(blackSum);
-        // REN = 0;
-        // Linetracer::Colors colorResult = judgeColor();
-        // Serial.print("color: ");
-        // Serial.println(colorsToString(colorResult));
-        // if(colorResult == WW){
-        //     manager.stop(false);
-        //     manager.straight(slowSpeed, straightLength * 5);
-        //     //manager.straight(slowSpeed, straightLength * 5);
-        //     // blackSum = 0;
-        //     // for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
-        //     // if(blackSum >= 3) manager.straight(speed, straightLength);
-        //     // else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
-        //     //     left90();
-        //     // else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
-        //     //     right90();
-        //     // else // 何か事故が起きてるので少し下がってみる
-        //     //     manager.back(speed, backLength);
-        // }
-        // // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
+        Serial.print("blackSum: ");
+        Serial.println(blackSum);
+        REN = 0;
+        if(lineResult[LL]){
+            while (lineSensors[LL].read()){
+                manager.straight(slowSpeed);
+                if(lineSensors[RR].read()){
+                    Linetracer::Colors colorResult = judgeColor();
+                    if(colorResult == GW)
+                        left90();
+                    else if(colorResult == WG)
+                        right90();
+                    else if(colorResult == GG){
+                        right90();
+                        right90();
+                    }
+                }
+            }
+        }
+        if(lineResult[RR]){
+            while (lineSensors[RR].read()){
+                manager.straight(slowSpeed);
+                if(lineSensors[LL].read()){
+                    Linetracer::Colors colorResult = judgeColor();
+                    if(colorResult == GW)
+                        left90();
+                    else if(colorResult == WG)
+                        right90();
+                    else if(colorResult == GG){
+                        right90();
+                        right90();
+                    }
+                }
+            }
+        }
+        Serial.print("color: ");
+        Serial.println(colorsToString(colorResult));
+        if(colorResult == WW){
+            manager.stop(false);
+            manager.straight(slowSpeed, straightLength * 5);
+            //manager.straight(slowSpeed, straightLength * 5);
+            // blackSum = 0;
+            // for (size_t i = 0; i < 5; i++) blackSum += lineSensors[i].read();
+            // if(blackSum >= 3) manager.straight(speed, straightLength);
+            // else if (lineResult[L]) // ここはlineResult[LL]の方が良いかも
+            //     left90();
+            // else if (lineResult[R]) // ここもlineResult[RR]の方が良いかも
+            //     right90();
+            // else // 何か事故が起きてるので少し下がってみる
+            //     manager.back(speed, backLength);
+        }
+        // 正味ここらへんの条件分岐スタックうまく使えば賢く書けそうだけどまぁいいや
         // else if(colorResult == GW)
         //     left90();
         // else if(colorResult == WG)
@@ -141,19 +201,23 @@ bool Linetracer::run(){
         //     right90();
         //     right90();
         // }
-        // manager.stop(false);
+        manager.stop(false);
     }
     else if(lineResult[LL]){
         REN = 0;
-        Serial.println("left 90");
-        left90();
+        if(!finalJudge()){
+            Serial.println("left 90");
+            left90();
+        }
     }
     else if(lineResult[RR]){
         REN = 0;
-        Serial.println("right 90");
-        right90();
+        if(!finalJudge()){
+            Serial.println("right 90");
+            right90();
+        }
     }
-    if(lineResult[L]){
+    else if(lineResult[L]){
         Serial.println("L");
         REN++;
         manager.left(speed, true);

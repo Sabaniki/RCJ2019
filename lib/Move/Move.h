@@ -8,6 +8,7 @@ class Move {
 private:
     Motor motorL, motorR;
     RotaryEncoder rotaryEncoderL, rotaryEncoderR;
+    int offSet = 1.5;
 
 public:
     Move(Motor motorL, Motor motorR, RotaryEncoder rotaryEncoderL, RotaryEncoder rotaryEncoderR);

@@ -22,7 +22,7 @@ void Move::straight(int speed){
 
 // NOT USING ROTARYENCODER
 void Move::straight(int speed, int distance){ 
-    motorL.write(speed);
+    motorL.write(speed * offSet);
     motorR.write(speed);
     delay(distance);
     // int leftPower = 0, rightPower = 0;
@@ -54,7 +54,7 @@ void Move::straight(int speed, int distance){
 }
 
 void Move::back(int speed){
-    motorL.write(-speed);
+    motorL.write(-speed * offSet);
     motorR.write(-speed);
 }
 
@@ -63,24 +63,26 @@ void Move::back(int speed, int length){
     //     motorL.write(-speed);
     //     motorR.write(-speed);
     // }
-    motorL.write(-speed);
+    motorL.write(-speed * offSet);
     motorR.write(-speed);
     delay(length);
 }
 
 void  Move::right(int speed, bool rotate){
+    speed *= 1.5;
     if(rotate){
-        motorL.write(speed);
+        motorL.write(speed * offSet);
         motorR.write(-speed);
     }
     else {
-        motorL.write(speed);
+        motorL.write(speed * offSet);
         motorR.write(0);
     }
 }
 void  Move::left(int speed, bool rotate){
+    speed *= 1.5;
     if(rotate){
-        motorL.write(-speed);
+        motorL.write(-speed * offSet);
         motorR.write(speed);
     }
     else {
@@ -102,7 +104,7 @@ void Move::stop(bool strong){
 }
 
 void Move::write(int leftSpeed, int rightSpeed){
-    motorL.write(leftSpeed);
+    motorL.write(leftSpeed * offSet);
     motorR.write(rightSpeed);
 }
 
