@@ -21,7 +21,7 @@
 #define MOTOR_R_BACK_PIN 4
 
 //----- ロータリーエンコーダ -----//
-#define ROTARY_ENCODER_READER_PIN A0
+#define ROTARY_ENCODER_READER_PIN A1
 #define STRAIGHT_LENGH 150
 #define BACK_LENGH 150
 #define REN_LENGTH 10
@@ -29,8 +29,8 @@
 #define IKKAITEN 19
 
 //----- 速度 -----//
-#define SPEED 100
-#define SLOW_SPEED 80
+#define SPEED 80
+#define SLOW_SPEED 60
 #define SPEED_ACC 2.2
 
 //----- チルトセンサ -----//

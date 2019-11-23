@@ -22,10 +22,16 @@ private:
         PhotoReflector(LINE_SENSOR_PIN_4),
         PhotoReflector(LINE_SENSOR_PIN_5),
     };
-    const int colorThresholds[3][3] = { 
-        { 27, 65, 47 },  //G
-        { 80, 127, 92 },  //W
-        { 30, 58, 44 },  //B
+    const int colorThresholdsL[3][3] = { 
+        { 23, 66,  42 },  //G
+        { 84, 130, 96 },  //W
+        { 20, 43, 34  },  //B
+    };
+
+    const int colorThresholdsR[3][3] = { 
+        { 54, 73,  54 },  //G
+        { 84, 130, 96 },  //W
+        { 34, 52, 50  },  //B
     };
 
     // {0: 左, 1: 右}
@@ -35,14 +41,14 @@ private:
             COLOR_SENSOR_GREEN_PIN,
             COLOR_SENSOR_BLUE_PIN,
             COLOR_SENSOR_L_READER_PIN,
-            colorThresholds
+            colorThresholdsL
         ),
         ColorSensor(
             COLOR_SENSOR_RED_PIN,
             COLOR_SENSOR_GREEN_PIN,
             COLOR_SENSOR_BLUE_PIN,
             COLOR_SENSOR_R_READER_PIN,
-            colorThresholds
+            colorThresholdsR
         ),
     };
 
@@ -56,12 +62,13 @@ private:
     };
 
     bool lineResult[5] = { false, false, false, false, false };
-    char colorResult[5];
+    
     void kingOfJudge();
     void newKingOfJudge();
     Colors BNB_Judge();
     Colors judgeColor();
     const char* colorsToString(Linetracer::Colors color);
+    void finalJudge();
 
     int speed = SPEED;
     const int slowSpeed = SLOW_SPEED;
