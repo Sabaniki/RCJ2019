@@ -8,7 +8,6 @@
 #include "ColorSensor.cpp"
 #include "RotaryEncoder.h"
 #include "RotaryEncoder.cpp"
-
 Linetracer::Linetracer():
     manager(
         Motor(MOTOR_L_FRONT_PIN, MOTOR_L_BACK_PIN),
@@ -17,6 +16,8 @@ Linetracer::Linetracer():
         RotaryEncoder(ROTARY_ENCODER_READER_PIN, THRESHOLD_ROTARY_ENCODER)
     ),
     tiltSensor(TILT_SENSOR_READER_PIN, INPUT){
+    frontServo.attach(SERVO_FRONT);
+    backServo.attach(SERVO_BACK);
 }
 
 void Linetracer::newKingOfJudge(){
@@ -185,7 +186,8 @@ void Linetracer::avoid(){
 
 Linetracer::Colors Linetracer::judgeColor(int time){
     Serial.println("judge color");
-    manager.back(slowSpeed, backLength * 0.8 + time);
+    manager.back(speed, (backLength  + time));
+    //while(manager.stop(false), true);
     int result = 0;
     char colors[2] = {
         colorSensors[0].read(),
@@ -206,13 +208,13 @@ void Linetracer::right90(){
     time = millis();
     while (lineSensors[C].read()){
         manager.right(slowSpeed, true);
-        if((millis() - time) > 10000) break;
+        if((millis() - time) > 8000) break;
         //10秒立ったらやめる
     }
     time = millis();
     while (!lineSensors[C].read()){
         manager.right(slowSpeed, true);
-        if((millis() - time) > 10000) break;
+        if((millis() - time) > 8000) break;
         //10秒立ったらやめる
     }
 }
@@ -224,13 +226,13 @@ void Linetracer::left90(){
     time = millis();
     while (lineSensors[C].read()){
         manager.left(slowSpeed, true);
-        if((millis() - time) > 10000) break;
+        if((millis() - time) > 8000) break;
         //10秒立ったらやめる
     }
     time = millis();
     while (!lineSensors[C].read()){
         manager.left(slowSpeed, true);
-        if((millis() - time) > 10000) break;
+        if((millis() - time) > 8000) break;
         //10秒立ったらやめる
     }
 }
@@ -246,6 +248,8 @@ const char* Linetracer::colorsToString(Linetracer::Colors color){
 }
 
 bool Linetracer::run(){
+    frontServo.write(frontUp);
+    backServo.write(backDown);
     int GGcount = 0;
     int BNPcount = 0;
     for (size_t i = 0; i < 5; i++){
@@ -257,16 +261,16 @@ bool Linetracer::run(){
         Serial.print(", ");
     }
     Serial.println("");
-    speed = tiltSensor.read()? SPEED * SPEED_ACC: SPEED;
+    speed = (tiltSensor.read() || switches[0].read() || switches[1].read())? SPEED * SPEED_ACC: SPEED;
     Serial.print("current speed: ");
     Serial.println(speed);
     colorResult = MV;
 
-    avoid();
+    // avoid();
     if(!(blackSum == 5)){
         //manager.straight(speed*1.5,straightLength * 2);
         //manager.back(speed*1.5,straightLength * 2);
-        finalJudge(1000);
+        finalJudge(500);
     }else{
         Serial.println("All Blacks");
     }
@@ -307,12 +311,12 @@ bool Linetracer::run(){
     if(lineResult[L]){
         Serial.println("L");
         REN++;
-        manager.left(speed, true);
+        manager.left(speed, false);
     }
     else if(lineResult[R]){
         Serial.println("R");
         REN++;
-        manager.right(speed, true);
+        manager.right(speed, false);
     }
     else {
         Serial.println("Straight");

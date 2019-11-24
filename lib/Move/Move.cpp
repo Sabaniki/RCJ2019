@@ -17,13 +17,13 @@ Move::Move(Motor motorL, Motor motorR, RotaryEncoder rotaryEncoderL, RotaryEncod
 
 void Move::straight(int speed){
     motorL.write(speed);
-    motorR.write(speed);
+    motorR.write(speed  * offSet);
 }
 
 // NOT USING ROTARYENCODER
 void Move::straight(int speed, int distance){ 
-    motorL.write(speed * offSet);
-    motorR.write(speed);
+    motorL.write(speed);
+    motorR.write(speed * offSet);
     delay(distance);
     // int leftPower = 0, rightPower = 0;
     // const int L = 0, R = 1;
@@ -54,8 +54,8 @@ void Move::straight(int speed, int distance){
 }
 
 void Move::back(int speed){
-    motorL.write(-speed * offSet);
-    motorR.write(-speed);
+    motorL.write(-speed);
+    motorR.write(-speed  * offSet);
 }
 
 void Move::back(int speed, int length){
@@ -63,31 +63,31 @@ void Move::back(int speed, int length){
     //     motorL.write(-speed);
     //     motorR.write(-speed);
     // }
-    motorL.write(-speed * offSet);
-    motorR.write(-speed);
+    motorL.write(-speed);
+    motorR.write(-speed  * offSet);
     delay(length);
 }
 
 void  Move::right(int speed, bool rotate){
     speed *= 1.5;
     if(rotate){
-        motorL.write(speed * offSet);
-        motorR.write(-speed);
+        motorL.write(speed);
+        motorR.write(-speed  * offSet);
     }
     else {
-        motorL.write(speed * offSet);
+        motorL.write(speed);
         motorR.write(0);
     }
 }
 void  Move::left(int speed, bool rotate){
     speed *= 1.5;
     if(rotate){
-        motorL.write(-speed * offSet);
-        motorR.write(speed);
+        motorL.write(-speed);
+        motorR.write(speed  * offSet);
     }
     else {
         motorL.write(0);
-        motorR.write(speed);
+        motorR.write(speed  * offSet);
     }
 }
 
@@ -104,8 +104,8 @@ void Move::stop(bool strong){
 }
 
 void Move::write(int leftSpeed, int rightSpeed){
-    motorL.write(leftSpeed * offSet);
-    motorR.write(rightSpeed);
+    motorL.write(leftSpeed);
+    motorR.write(rightSpeed  * offSet);
 }
 
 // このメソッドあんまいらないかもしれない

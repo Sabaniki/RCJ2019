@@ -11,6 +11,7 @@
 #include "ColorSensor.cpp"
 #include "KuromikaLine.h"
 #include "KuromikaLine.cpp"
+#include "Servo.h"
 
 class Linetracer {
 private:
@@ -86,6 +87,12 @@ private:
         DigitalPin(SWITCH_PIN_L, INPUT_PULLUP),
         DigitalPin(SWITCH_PIN_R, INPUT_PULLUP),
     };
+    Servo frontServo;
+    Servo backServo;
+    const int frontUp = 5;
+    const int frontDown = 160;
+    const int backUp = 0;
+    const int backDown = 60;
 
 public:
     Linetracer();
